@@ -1,0 +1,36 @@
+{
+    "name": "thunderer/platenum",
+    "description": "PHP enum library",
+    "keywords": ["enum", "enumeration"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tomasz Kowalczyk",
+            "email": "tomasz@kowalczyk.cc"
+        }
+    ],
+    "require": {
+        "php": "^7.1"
+    },
+    "require-dev": {
+        "ext-json": "*",
+        "phpunit/phpunit": ">=6.0",
+        "hirak/prestissimo": "^0.3.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Thunder\\Platenum\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Thunder\\Platenum\\Tests\\": "tests"
+        }
+    },
+    "suggest": {
+        "ext-json": "Allow JSON serializable enumerations."
+    },
+    "config": {
+    }
+}

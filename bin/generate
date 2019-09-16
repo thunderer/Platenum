@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+<?php
+declare(strict_types=1);
+namespace X;
+
+use Thunder\Platenum\Command\GenerateCommand;
+
+$vendorLoaderPath  = dirname(__DIR__, 3).'/vendor/autoload.php';
+$packageLoaderPath = dirname(__DIR__, 1).'/vendor/autoload.php';
+$loader = require file_exists($vendorLoaderPath) ? $vendorLoaderPath : $packageLoaderPath;
+
+(new GenerateCommand($loader))->execute($argc, $argv);
