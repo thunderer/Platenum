@@ -19,7 +19,7 @@ trait DocblockEnumTrait
             throw PlatenumException::fromMissingDocblock($class);
         }
 
-        if(\preg_match_all('~^\s+\*\s+@method\s+static\s+self\s+(?<key>\w+)\(\)$~m', $doc, $matches) < 1) {
+        if(\preg_match_all('~^\s+\*\s+@method\s+static\s+(?:self|static)\s+(?<key>\w+)\(\)$~m', $doc, $matches) < 1) {
             throw PlatenumException::fromEmptyDocblock($class);
         }
         if(\count($matches['key']) !== substr_count($doc, '@method')) {

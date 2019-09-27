@@ -22,6 +22,20 @@ final class DocblockEnumTest extends AbstractTestCase
         $this->assertSame($expected, $extends::getMembersAndValues());
     }
 
+    public function testAcceptBothSelfAndStaticDocblockTypeQualifiers(): void
+    {
+        /** @var FakeEnum $enum */
+        $enum = $this->computeUniqueClassName('X');
+        eval('/**
+         * @method static self FIRST()
+         * @method static static SECOND()
+         */
+        class '.$enum.' { use '.DocblockEnumTrait::class.'; }');
+
+        $this->assertSame('FIRST', $enum::FIRST()->getValue());
+        $this->assertSame('SECOND', $enum::SECOND()->getValue());
+    }
+
     public function testExceptionDocblockNotPresent(): void
     {
         /** @var FakeEnum $enum */
