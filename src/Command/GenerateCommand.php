@@ -120,7 +120,7 @@ final class GenerateCommand
             }
 
             $constantsEntries[] = '    private const '.strtoupper($key).' = '.$value.';';
-            $docblockEntries[] = ' * @method static self '.strtoupper($key).'()';
+            $docblockEntries[] = ' * @method static static '.strtoupper($key).'()';
             $staticEntries[] = '        \''.strtoupper($key).'\' => '.$value.';';
         }
 

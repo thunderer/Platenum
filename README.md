@@ -26,10 +26,10 @@ namespace X;
 use Thunder\Platenum\Enum\ConstantsEnumTrait;
 
 /**
- * @method static self ACTIVE()
- * @method static self INACTIVE()
- * @method static self SUSPENDED()
- * @method static self DISABLED()
+ * @method static static ACTIVE()
+ * @method static static INACTIVE()
+ * @method static static SUSPENDED()
+ * @method static static DISABLED()
  */
 final class AccountStatusEnum
 {
@@ -114,8 +114,8 @@ final class BooleanEnum extends AbstractConstantsEnum
 
 ```php
 /**
- * @method static self TRUE()
- * @method static self FALSE()
+ * @method static static TRUE()
+ * @method static static FALSE()
  */
 final class BooleanEnum
 {
@@ -125,8 +125,8 @@ final class BooleanEnum
 
 ```php
 /**
- * @method static self TRUE()
- * @method static self FALSE()
+ * @method static static TRUE()
+ * @method static static FALSE()
  */
 final class BooleanEnum extends AbstractDocblockEnum {}
 ```
