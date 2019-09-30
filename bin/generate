@@ -5,8 +5,16 @@ namespace X;
 
 use Thunder\Platenum\Command\GenerateCommand;
 
-$vendorLoaderPath  = dirname(__DIR__, 3).'/vendor/autoload.php';
+$vendorLoaderPath  = dirname(__DIR__, 4).'/vendor/autoload.php';
 $packageLoaderPath = dirname(__DIR__, 1).'/vendor/autoload.php';
-$loader = require file_exists($vendorLoaderPath) ? $vendorLoaderPath : $packageLoaderPath;
+
+if(file_exists($vendorLoaderPath)) {
+    $loader = require $vendorLoaderPath;
+} elseif(file_exists($packageLoaderPath)) {
+    $loader = require $packageLoaderPath;
+} else {
+    echo 'There is no autoloader present. Did you run composer install?'."\n";
+    exit(1);
+}
 
 (new GenerateCommand($loader))->execute($argc, $argv);

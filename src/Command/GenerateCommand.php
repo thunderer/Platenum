@@ -29,8 +29,10 @@ final class GenerateCommand
         $this->writeln('');
 
         if($argc < 4) {
-            $this->writeln('usage: bin/generate source class keys,values');
-            $this->writeln('       bin/generate constants MyEnum key1,key2=value2,key3');
+            $this->writeln('usage:    bin/generate <source> <class> MEMBER=value,MEMBER=value,...');
+            $this->writeln('examples: bin/generate constants UserStatus ACTIVE=1,INACTIVE=2');
+            $this->writeln('          bin/generate docblock PaymentType INTERNAL,EXTERNAL');
+            $this->writeln('          bin/generate static "Project\\Namespace\\Currency" PLN=10,EUR=12,USD=14');
             exit(1);
         }
         if(false === in_array($argv[1], ['constants', 'docblock', 'static'], true)) {
