@@ -210,7 +210,9 @@ trait EnumTrait
             return;
         }
 
-        if(false === method_exists($class, 'resolve')) {
+        // reflection instead of method_exists because of PHP 7.4 bug #78632
+        // @see https://bugs.php.net/bug.php?id=78632
+        if(false === (new \ReflectionClass($class))->hasMethod('resolve')) {
             throw PlatenumException::fromMissingResolve($class);
         }
         $members = static::resolve();

@@ -14,7 +14,9 @@ trait StaticEnumTrait
     final private static function resolve(): array
     {
         $class = static::class;
-        if(false === property_exists($class, 'mapping')) {
+        // reflection instead of property_exists because of PHP 7.4 bug #78632
+        // @see https://bugs.php.net/bug.php?id=78632
+        if(false === (new \ReflectionClass($class))->hasProperty('mapping')) {
             throw PlatenumException::fromMissingMappingProperty($class);
         }
 
