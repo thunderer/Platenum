@@ -174,6 +174,35 @@ final class BooleanEnum
 }
 ```
 
+## Exceptions
+
+The library throws default `PlatenumException` with dedicated message for all errors happening in the enum classes. Certain situations may require a dedicated exception class and message. To redefine the exception logic, override one or more of the static methods described below:
+
+- `throwInvalidMemberException()` used when enum receives an invalid enum **member** in any method,
+- `throwInvalidValueException()` used when enum receives an invalid enum **value** in any method.
+
+> NOTE: If the overridden method won't throw an exception, the library contains a safeguard which will still throw the default one. This way a development oversight won't hide errors in your application.
+
+```php
+final class AccountStatus
+{
+    use ConstantsEnumTrait;
+
+    private const ACTIVE = 1;
+    private const DISABLED = 2;
+
+    protected static function throwInvalidMemberException(string $name): void
+    {
+        throw new InvalidAccountStatusException($name);
+    }
+
+    protected static function throwInvalidValueException($value): void
+    {
+        throw new InvalidAccountStatusValueException($value);
+    }
+}
+```
+
 ## Reasons
 
 There are already a few `enum` libraries in the PHP ecosystem. Why another one? There are several reasons to do so:
