@@ -15,6 +15,7 @@ before_script:
 
 script:
  - vendor/bin/phpunit --coverage-text
+ - vendor/bin/psalm --threads=8 --no-cache
 
 matrix:
   allow_failures:

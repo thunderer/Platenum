@@ -16,7 +16,8 @@
     "require-dev": {
         "ext-json": "*",
         "phpunit/phpunit": ">=6.0",
-        "hirak/prestissimo": "^0.3.8"
+        "hirak/prestissimo": "^0.3.8",
+        "vimeo/psalm": "^3.10"
     },
     "autoload": {
         "psr-4": {
