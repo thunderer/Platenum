@@ -77,7 +77,7 @@ trait EnumTrait
             return static::$instances[$class][$name];
         }
 
-        return static::$instances[$class][$name] = new self($name, static::$members[$class][$name]);
+        return static::$instances[$class][$name] = new static($name, static::$members[$class][$name]);
     }
 
     final public static function fromEnum($enum): self
