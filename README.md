@@ -238,6 +238,39 @@ final class AccountStatus
 }
 ```
 
+## Persistence
+
+Enumerations are frequently used in entities and mapped in ORMs. Register your custom Doctrine enum type by calling dedicated `PlatenumDoctrineType` static method:
+
+```php
+PlatenumDoctrineType::registerString('currency', Currency::class);
+PlatenumDoctrineType::registerInteger('accountStatus', AccountStatus::class);
+```
+
+The alias provided as a first argument can be then used as a Doctrine type, as shown in the listings below (equivalent XML and PHP mapping):
+
+```xml
+<entity name="App\Entity" table="app_entity">
+    <id name="id" type="bigint" column="id" />
+    <field name="currencyCode" type="currency" column="currency_code" />
+    <field name="status" type="accountStatus" column="status" />
+</entity>
+```
+
+```php
+final class Entity
+{
+    public static function loadMetadata(ClassMetadata $m): void
+    {
+        $m->setPrimaryTable(['name' => 'doctrine_entity']);
+
+        $m->mapField(['fieldName' => 'id',     'type' => 'bigint',        'id' => true]);
+        $m->mapField(['fieldName' => 'code',   'type' => 'currency',      'columnName' => 'code']);
+        $m->mapField(['fieldName' => 'status', 'type' => 'accountStatus', 'columnName' => 'status']);
+    }
+}
+```
+
 ## Reasons
 
 There are already a few `enum` libraries in the PHP ecosystem. Why another one? There are several reasons to do so:
