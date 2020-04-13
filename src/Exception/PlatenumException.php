@@ -58,6 +58,16 @@ final class PlatenumException extends \LogicException
         return new self(sprintf('Enum `%s` does not allow magic `%s` method.', $fqcn, $method));
     }
 
+    public static function fromNonStringMembers(string $fqcn): self
+    {
+        return new self(sprintf('Enum `%s` requires all members to be strings.', $fqcn));
+    }
+
+    public static function fromNonUniformMemberValues(string $fqcn, array $members): self
+    {
+        return new self(sprintf('Enum `%s` member values must be of the same type, `%s` given.', $fqcn, implode(',', array_unique(array_map('gettype', $members)))));
+    }
+
     /* --- DOCBLOCK --- */
 
     public static function fromMissingDocblock(string $fqcn): self
@@ -80,5 +90,17 @@ final class PlatenumException extends \LogicException
     public static function fromMissingMappingProperty(string $fqcn): self
     {
         return new self(sprintf('Enum %s requires static property $mapping with members definitions.', $fqcn));
+    }
+
+    /* --- CALLBACK --- */
+
+    public static function fromInvalidCallback(string $fqcn): self
+    {
+        return new self(sprintf('Enum %s requires static property $callback to be a valid callable returning members and values mapping.', $fqcn));
+    }
+
+    public static function fromAlreadyInitializedCallback(string $fqcn): self
+    {
+        return new self(sprintf('Enum %s callback was already initialized.', $fqcn));
     }
 }
