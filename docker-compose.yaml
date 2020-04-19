@@ -9,7 +9,7 @@ services:
     working_dir: /app
 
   php:
-    image: php:${PHP_VERSION}
+    build: docker/php${PHP_VERSION}-xdebug
     volumes:
       - .:/app
     working_dir: /app

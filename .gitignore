@@ -3,5 +3,6 @@
 tmp-phpqa
 coverage
 coverage.xml
+infection.log
 composer.lock
 vendor
