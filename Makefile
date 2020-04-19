@@ -1,3 +1,12 @@
+composer-install:
+	PHP_VERSION=7.4 docker-compose run --rm composer composer install
+composer-update:
+	PHP_VERSION=7.4 docker-compose run --rm composer composer update
+composer-require:
+	PHP_VERSION=7.4 docker-compose run --rm composer composer require ${PACKAGE}
+composer-require-dev:
+	PHP_VERSION=7.4 docker-compose run --rm composer composer require --dev ${PACKAGE}
+
 test: test-phpunit
 test-phpunit:
 	PHP_VERSION=7.4 docker-compose run --rm php php -v
@@ -22,3 +31,6 @@ travis-job:
 
 qa-psalm:
 	PHP_VERSION=7.4 docker-compose run --rm php php vendor/bin/psalm --no-cache
+
+run-php:
+	PHP_VERSION=7.4 docker-compose run --rm php php ${FILE}
