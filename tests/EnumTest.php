@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Thunder\Platenum\Tests;
 
 use Thunder\Platenum\Enum\AbstractConstantsEnum;
+use Thunder\Platenum\Enum\AbstractStaticEnum;
+use Thunder\Platenum\Enum\EnumTrait;
 use Thunder\Platenum\Exception\PlatenumException;
 use Thunder\Platenum\Tests\Fake\FakeEnum;
 
@@ -429,5 +431,97 @@ final class EnumTest extends AbstractTestCase
         $this->expectException(PlatenumException::class);
         $this->expectExceptionMessage('Enum `'.$enum.'` does not allow magic `__unset` method.');
         unset($enum::FIRST()->invalidProperty);
+    }
+
+    /* --- CUSTOM EXCEPTION --- */
+
+    /** @dataProvider provideCustomExceptions */
+    public function testTraitCustomException(string $type, callable $handler): void
+    {
+        $this->runCustomExceptionTest('trait', $type, $handler);
+    }
+
+    /** @dataProvider provideCustomExceptions */
+    public function testExtendsCustomException(string $type, callable $handler): void
+    {
+        $this->runCustomExceptionTest('extends', $type, $handler);
+    }
+
+    private function runCustomExceptionTest(string $const, string $type, callable $handler): void
+    {
+        $members = ['FIRST' => 1];
+        $methodMap = [
+            'invalidMember' => 'throwInvalidMemberException(string $member)',
+            'invalidValue' => 'throwInvalidValueException($value)',
+        ];
+        if(false === isset($methodMap[$type])) {
+            throw new \LogicException(sprintf('Unrecognized override type `%s`.', $type));
+        }
+
+        $exceptionClass = $this->computeUniqueClassName('EnumException');
+        eval('final class '.$exceptionClass.' extends \Exception {}');
+
+        $class = $this->computeUniqueClassName('EnumCustomException');
+        $resolve = 'private static function resolve(): array { return '.var_export($members, true).'; }';
+        $mapping = 'protected static $mapping = '.var_export($members, true).';';
+        $override = 'protected static function '.$methodMap[$type].': void { throw new '.$exceptionClass.'(); }';
+        switch($const) {
+            case 'extends': { $code = 'final class '.$class.' extends '.AbstractStaticEnum::class.' {  '.$mapping.$override.' }'; break; }
+            case 'trait':   { $code = 'final class '.$class.' { use '.EnumTrait::class.'; '.$resolve.$override.' }'; break; }
+            default: { throw new \LogicException(sprintf('Invalid extension type `%s`.', $const)); }
+        }
+        eval($code);
+
+        $this->expectException($exceptionClass);
+        $handler($class);
+    }
+
+    public function provideCustomExceptions(): array
+    {
+        return [
+            ['invalidMember', function(string $class) { return $class::INVALID(); }],
+            ['invalidMember', function(string $class) { return $class::fromMember('INVALID'); }],
+            ['invalidValue', function(string $class) { return $class::fromValue('invalid'); }],
+            ['invalidMember', function(string $class) { return $class::memberToValue('INVALID'); }],
+            ['invalidValue', function(string $class) { return $class::valueToMember('invalid'); }],
+        ];
+    }
+
+    /** @dataProvider provideCustomExceptions */
+    public function testTraitCustomExceptionEmptyMethod(string $type, callable $handler): void
+    {
+        $this->runCustomExceptionEmptyMethodTest('trait', $type, $handler);
+    }
+
+    /** @dataProvider provideCustomExceptions */
+    public function testExtendsCustomExceptionEmptyMethod(string $type, callable $handler): void
+    {
+        $this->runCustomExceptionEmptyMethodTest('extends', $type, $handler);
+    }
+
+    private function runCustomExceptionEmptyMethodTest(string $const, string $type, callable $handler): void
+    {
+        $members = ['FIRST' => 1];
+        $methodMap = [
+            'invalidMember' => 'throwInvalidMemberException(string $member)',
+            'invalidValue' => 'throwInvalidValueException($value)',
+        ];
+        if(false === isset($methodMap[$type])) {
+            throw new \LogicException(sprintf('Unrecognized override type `%s`.', $type));
+        }
+
+        $class = $this->computeUniqueClassName('EnumCustomException');
+        $resolve = 'private static function resolve(): array { return '.var_export($members, true).'; }';
+        $mapping = 'protected static $mapping = '.var_export($members, true).';';
+        $override = 'protected static function '.$methodMap[$type].': void {}';
+        switch($const) {
+            case 'extends': { $code = 'final class '.$class.' extends '.AbstractStaticEnum::class.' {  '.$mapping.$override.' }'; break; }
+            case 'trait':   { $code = 'final class '.$class.' { use '.EnumTrait::class.'; '.$resolve.$override.' }'; break; }
+            default: { throw new \LogicException(sprintf('Invalid extension type `%s`.', $const)); }
+        }
+        eval($code);
+
+        $this->expectException(PlatenumException::class);
+        $handler($class);
     }
 }

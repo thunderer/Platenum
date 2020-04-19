@@ -7,6 +7,20 @@ namespace Thunder\Platenum\Exception;
  */
 final class PlatenumException extends \LogicException
 {
+    /* --- OVERRIDE --- */
+
+    public static function fromInvalidMember(string $fqcn, string $member, array $members): self
+    {
+        return new self(sprintf('Enum `%s` does not contain member `%s` among `%s`.', $fqcn, $member, implode(',', array_keys($members))));
+    }
+
+    public static function fromInvalidValue(string $fqcn, $value): self
+    {
+        return new self(sprintf('Enum `%s` does not contain any member with value `%s`.', $fqcn, $value));
+    }
+
+    /* --- GENERIC --- */
+
     public static function fromIllegalValue(string $fqcn, $value): self
     {
         return new self(sprintf('Enum `%s` value must be a scalar, `%s` given.', $fqcn, gettype($value)));
@@ -15,16 +29,6 @@ final class PlatenumException extends \LogicException
     public static function fromMismatchedClass(string $fqcn, string $other): self
     {
         return new self(sprintf('Attempting to recreate enum %s from instance of %s.', $fqcn, $other));
-    }
-
-    public static function fromMissingMember(string $fqcn, string $member, array $members): self
-    {
-        return new self(sprintf('Enum `%s` does not contain member `%s` among `%s`.', $fqcn, $member, implode(',', array_keys($members))));
-    }
-
-    public static function fromMissingValue(string $fqcn, $value): self
-    {
-        return new self(sprintf('Enum `%s` does not contain any member with value `%s`.', $fqcn, $value));
     }
 
     public static function fromConstantArguments(string $fqcn): self

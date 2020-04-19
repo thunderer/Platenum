@@ -25,7 +25,7 @@ abstract class AbstractTestCase extends TestCase
             $entries[] = sprintf('%s => %s', '\''.$member.'\'', is_string($value) ? '\''.$value.'\'' : $value);
         }
 
-        $class = $this->computeUniqueClassName('DocblockTrait');
+        $class = $this->computeUniqueClassName('RawEnum');
         eval('final class '.$class.' implements \JsonSerializable {
             use '.EnumTrait::class.';
             private static function resolve(): array { return ['.implode(', ', $entries).']; }
