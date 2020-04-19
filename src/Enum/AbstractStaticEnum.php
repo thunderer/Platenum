@@ -9,5 +9,6 @@ abstract class AbstractStaticEnum implements \JsonSerializable
 {
     use StaticEnumTrait;
 
+    /** @var array */
     protected static $mapping = [];
 }

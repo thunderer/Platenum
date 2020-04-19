@@ -14,13 +14,15 @@ final class PlatenumException extends \LogicException
         return new self(sprintf('Enum `%s` does not contain member `%s` among `%s`.', $fqcn, $member, implode(',', array_keys($members))));
     }
 
+    /** @param mixed $value */
     public static function fromInvalidValue(string $fqcn, $value): self
     {
-        return new self(sprintf('Enum `%s` does not contain any member with value `%s`.', $fqcn, $value));
+        return new self(sprintf('Enum `%s` does not contain any member with value `%s`.', $fqcn, is_scalar($value) ? (string)$value : gettype($value)));
     }
 
     /* --- GENERIC --- */
 
+    /** @param mixed $value */
     public static function fromIllegalValue(string $fqcn, $value): self
     {
         return new self(sprintf('Enum `%s` value must be a scalar, `%s` given.', $fqcn, gettype($value)));

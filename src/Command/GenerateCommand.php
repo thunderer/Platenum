@@ -23,6 +23,10 @@ final class GenerateCommand
         $this->classLoader = $loader;
     }
 
+    /**
+     * @param int $argc
+     * @param string[] $argv
+     */
     public function execute(int $argc, array $argv): void
     {
         $this->writeln('Platenum (c) 2019 Tomasz Kowalczyk.');
@@ -74,12 +78,16 @@ final class GenerateCommand
 
     private function computeClassPath(string $fqcn): string
     {
-        $prefix = null;
-        $path = null;
+        $prefix = '';
+        $path = '';
+        /**
+         * @var string $ns
+         * @var string[] $paths
+         */
         foreach($this->classLoader->getPrefixesPsr4() as $ns => $paths) {
             if(0 === strpos($fqcn, $ns)) {
                 $prefix = $ns;
-                $path = realpath($paths[0]);
+                $path = (string)realpath($paths[0]);
                 break;
             }
         }
@@ -113,6 +121,7 @@ final class GenerateCommand
         $docblockEntries = [];
         $constantsEntries = [];
         $staticEntries = [];
+        /** @var array<string,array<int,string>> $matches */
         $count = \count($matches['key']);
         for($i = 0; $i < $count; $i++) {
             $key = $matches['key'][$i];
@@ -135,7 +144,7 @@ final class GenerateCommand
             '<NS>' => $namespace,
             '<CLASS>' => $class,
             '<DOCBLOCK>' => implode("\n", $docblockEntries),
-            '<TRAIT>' => substr($values[$type]['trait'], strrpos($values[$type]['trait'], "\\") + 1),
+            '<TRAIT>' => substr($values[$type]['trait'], (int)strrpos($values[$type]['trait'], "\\") + 1),
             '<TRAIT_NS>' => $values[$type]['trait'],
             '<MEMBERS>' => $values[$type]['members'],
         ];
