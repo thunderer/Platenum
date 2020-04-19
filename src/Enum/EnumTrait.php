@@ -92,7 +92,7 @@ trait EnumTrait
 
     /**
      * @param static $enum
-     * @param-out AbstractConstantsEnum|AbstractDocblockEnum|AbstractStaticEnum $enum
+     * @param-out AbstractConstantsEnum|AbstractDocblockEnum|AbstractStaticEnum|AbstractCallbackEnum $enum
      */
     final public function fromInstance(&$enum): void
     {
@@ -254,6 +254,12 @@ trait EnumTrait
         }
         if(\count($members) !== \count(\array_unique($members))) {
             throw PlatenumException::fromNonUniqueMembers($class);
+        }
+        if(['string'] !== \array_unique(\array_map('gettype', array_keys($members)))) {
+            throw PlatenumException::fromNonStringMembers($class);
+        }
+        if(1 !== \count(\array_unique(\array_map('gettype', $members)))) {
+            throw PlatenumException::fromNonUniformMemberValues($class, $members);
         }
 
         static::$members[$class] = $members;

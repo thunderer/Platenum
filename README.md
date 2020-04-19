@@ -155,6 +155,41 @@ final class BooleanEnum extends AbstractStaticEnum
 }
 ```
 
+**callback**
+
+```php
+final class Currency
+{
+    use CallbackEnumTrait;
+}
+```
+
+```php
+final class Currency extends AbstractCallbackEnum
+{
+}
+```
+
+Unlike other types, callback enum requires initialization before creating member instances. To make it ready to use, run `initialize()` method with a callback returning `member => value` mapping (similar to `StaticEnumTrait`). This callback will be run exactly once right before creating the first member instance:
+
+```php
+Currency::initialize(fn() => [
+    'PLN' => 985,
+    'EUR' => 978,
+    'USD' => 840,
+]);
+```
+
+> NOTE: This type allows loading members and values mapping from virtually any external place (database, Redis, session, files, etc.). The only requirement for this callable is that it returns a proper `member => value` pairs.
+
+```php
+Currency::initialize(fn() => SomeClass::CONSTANT);
+Currency::initialize(fn() => $database->sql('...'));
+Currency::initialize(fn() => $redis->hGetAll('...'));
+Currency::initialize(fn() => json_decode(file_get_contents('...')));
+// etc.
+```
+
 **custom source**
 
 > Note: The `resolve` method will be called only once when the enumeration is used for the first time.

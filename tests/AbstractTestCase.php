@@ -3,9 +3,11 @@ declare(strict_types=1);
 namespace Thunder\Platenum\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Thunder\Platenum\Enum\AbstractCallbackEnum;
 use Thunder\Platenum\Enum\AbstractConstantsEnum;
 use Thunder\Platenum\Enum\AbstractDocblockEnum;
 use Thunder\Platenum\Enum\AbstractStaticEnum;
+use Thunder\Platenum\Enum\CallbackEnumTrait;
 use Thunder\Platenum\Enum\ConstantsEnumTrait;
 use Thunder\Platenum\Enum\DocblockEnumTrait;
 use Thunder\Platenum\Enum\EnumTrait;
@@ -114,6 +116,24 @@ abstract class AbstractTestCase extends TestCase
 
         $class = $this->computeUniqueClassName('StaticExtends');
         eval('final class '.$class.' extends '.AbstractStaticEnum::class.' { protected static $mapping = ['.implode(', ', $entries).']; }');
+
+        return $class;
+    }
+
+    /** @return FakeEnum */
+    protected function makeCallbackTraitEnum(array $members): string
+    {
+        $class = $this->computeUniqueClassName('CallbackTrait');
+        eval('final class '.$class.' implements \JsonSerializable { use '.CallbackEnumTrait::class.'; }');
+
+        return $class;
+    }
+
+    /** @return FakeEnum */
+    protected function makeCallbackExtendsEnum(array $members): string
+    {
+        $class = $this->computeUniqueClassName('CallbackExtends');
+        eval('final class '.$class.' extends '.AbstractCallbackEnum::class.' { }');
 
         return $class;
     }

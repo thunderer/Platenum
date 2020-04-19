@@ -136,6 +136,24 @@ final class EnumTest extends AbstractTestCase
         $enum::FIRST();
     }
 
+    public function testExceptionNonStringMember(): void
+    {
+        $enum = $this->makeRawEnum([42 => 'invalid']);
+
+        $this->expectException(PlatenumException::class);
+        $this->expectExceptionMessage('Enum `'.$enum.'` requires all members to be strings.');
+        $enum::fromValue(42);
+    }
+
+    public function testExceptionNonUniformValueType(): void
+    {
+        $enum = $this->makeRawEnum(['FIRST' => 1, 'SECOND' => '2']);
+
+        $this->expectException(PlatenumException::class);
+        $this->expectExceptionMessage('Enum `'.$enum.'` member values must be of the same type, `integer,string` given.');
+        $enum::fromValue(42);
+    }
+
     /* --- GENERIC --- */
 
     public function testExtendedExtendedEnum(): void
