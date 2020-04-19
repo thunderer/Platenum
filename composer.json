@@ -19,7 +19,8 @@
         "hirak/prestissimo": "^0.3.8",
         "vimeo/psalm": "^3.10",
         "doctrine/dbal": "^2.9",
-        "doctrine/orm": "^2.7"
+        "doctrine/orm": "^2.7",
+        "infection/infection": ">=0.13"
     },
     "autoload": {
         "psr-4": {

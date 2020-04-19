@@ -15,6 +15,8 @@ before_script:
 script:
  - vendor/bin/phpunit --coverage-text
  - vendor/bin/psalm --threads=8 --no-cache
+ - vendor/bin/infection
+ - cat infection.log
 
 matrix:
   allow_failures:
