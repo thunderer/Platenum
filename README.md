@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/thunderer/Platenum.png?branch=master)](https://travis-ci.org/thunderer/Platenum)
 [![License](https://poser.pugx.org/thunderer/platenum/license.svg)](https://packagist.org/packages/thunderer/platenum)
 [![Latest Stable Version](https://poser.pugx.org/thunderer/platenum/v/stable.svg)](https://packagist.org/packages/thunderer/platenum)
+[![Psalm coverage](https://shepherd.dev/github/thunderer/Platenum/coverage.svg?)](https://shepherd.dev/github/thunderer/Platenum)
 
 Platenum provides a flexible and feature-complete solution for [enumerations (enums)](https://en.wikipedia.org/wiki/Enumerated_type) in PHP with no external dependencies. The name comes from the Latin term for a [Platinum](https://en.wikipedia.org/wiki/Platinum) chemical element.
 
