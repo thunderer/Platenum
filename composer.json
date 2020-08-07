@@ -17,7 +17,7 @@
         "ext-json": "*",
         "phpunit/phpunit": ">=6.0",
         "hirak/prestissimo": "^0.3.8",
-        "vimeo/psalm": "^3.10",
+        "vimeo/psalm": "^3.14",
         "doctrine/dbal": "^2.9",
         "doctrine/orm": "^2.7",
         "infection/infection": ">=0.13"

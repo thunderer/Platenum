@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Thunder\Platenum\Tests;
 
+use Thunder\Platenum\Enum\CallbackEnumTrait;
 use Thunder\Platenum\Exception\PlatenumException;
 
 /**
@@ -41,5 +42,20 @@ final class CallbackEnumTest extends AbstractTestCase
         $this->expectException(PlatenumException::class);
         $this->expectExceptionMessage('Enum '.$class.' callback was already initialized.');
         $class::initialize(function() use($members) { return $members; });
+    }
+
+    public function testImpossibleExceptionCallbackNotCallable(): void
+    {
+        $class = $this->computeUniqueClassName('CallbackTrait');
+        eval('final class '.$class.' implements \JsonSerializable { use '.CallbackEnumTrait::class.'; }');
+
+        $ref = new \ReflectionClass($class);
+        $callbacks = $ref->getProperty('callbacks');
+        $callbacks->setAccessible(true);
+        $callbacks->setValue($class, [$class => 'invalid']);
+
+        $this->expectException(PlatenumException::class);
+        $this->expectExceptionMessage('Enum '.$class.' requires static property $callback to be a valid callable returning members and values mapping.');
+        $class::FIRST();
     }
 }

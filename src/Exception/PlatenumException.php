@@ -17,7 +17,7 @@ final class PlatenumException extends \LogicException
     /** @param mixed $value */
     public static function fromInvalidValue(string $fqcn, $value): self
     {
-        return new self(sprintf('Enum `%s` does not contain any member with value `%s`.', $fqcn, is_scalar($value) ? (string)$value : gettype($value)));
+        return new self(sprintf('Enum `%s` does not contain any member with value `%s`.', $fqcn, is_scalar($value) ? strval($value) : gettype($value)));
     }
 
     /* --- GENERIC --- */

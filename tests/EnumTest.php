@@ -147,7 +147,7 @@ final class EnumTest extends AbstractTestCase
 
     public function testExceptionNonUniformValueType(): void
     {
-        $enum = $this->makeRawEnum(['FIRST' => 1, 'SECOND' => '2']);
+        $enum = $this->makeRawEnum(['FIRST' => 1, 'SECOND' => '2', 'THIRD' => '3']);
 
         $this->expectException(PlatenumException::class);
         $this->expectExceptionMessage('Enum `'.$enum.'` member values must be of the same type, `integer,string` given.');
@@ -213,6 +213,7 @@ final class EnumTest extends AbstractTestCase
         $enumA = $this->makeRawEnum(['FIRST' => 1, 'SECOND' => 2]);
         $enumB = $this->makeRawEnum(['FIRST' => 'first', 'SECOND' => 'second']);
 
+        $this->assertFalse($enumA::FIRST()->equals($enumB::FIRST()));
         $this->assertNotSame($enumA::FIRST(), $enumB::FIRST());
         $this->assertNotSame($enumA::SECOND(), $enumB::SECOND());
     }
@@ -305,6 +306,17 @@ final class EnumTest extends AbstractTestCase
 
         $this->assertSame('FIRST', $intEnum::valueToMember(1));
         $this->assertSame('FIRST', $stringEnum::valueToMember('first'));
+    }
+
+    public function testImpossibleValueToMemberInvalidMemberTypeException(): void
+    {
+        $enum = $this->makeRawEnum(['FIRST' => 'first', 'SECOND' => 'second']);
+        $ref = new \ReflectionClass($enum);
+        $members = $ref->getProperty('members');
+        $members->setAccessible(true);
+        $members->setValue($enum, [$enum => [0 => 'first']]);
+
+        $this->assertSame('0', $enum::valueToMember('first'));
     }
 
     public function testJsonEncode(): void

@@ -26,13 +26,11 @@ trait CallbackEnumTrait
 
     final private static function resolve(): array
     {
-        if(false === array_key_exists(static::class, static::$callbacks)) {
-            throw PlatenumException::fromInvalidCallback(static::class);
-        }
-        if(false === is_callable(static::$callbacks[static::class])) {
-            throw PlatenumException::fromInvalidCallback(static::class);
+        $class = static::class;
+        if(false === (array_key_exists($class, static::$callbacks) && is_callable(static::$callbacks[$class]))) {
+            throw PlatenumException::fromInvalidCallback($class);
         }
 
-        return (static::$callbacks[static::class])();
+        return (static::$callbacks[$class])();
     }
 }
