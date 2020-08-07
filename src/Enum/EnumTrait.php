@@ -255,6 +255,7 @@ trait EnumTrait
         if(\count($members) !== \count(\array_unique($members))) {
             throw PlatenumException::fromNonUniqueMembers($class);
         }
+        /** @psalm-suppress RedundantCondition */
         if(['string'] !== \array_unique(\array_map('gettype', array_keys($members)))) {
             throw PlatenumException::fromNonStringMembers($class);
         }
