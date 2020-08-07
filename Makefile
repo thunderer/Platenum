@@ -1,16 +1,16 @@
 composer-install:
-	PHP_VERSION=74 docker-compose run --rm composer composer install
+	PHP_VERSION=7.4 docker-compose run --rm composer composer install
 composer-update:
-	PHP_VERSION=74 docker-compose run --rm composer composer update
+	PHP_VERSION=7.4 docker-compose run --rm composer composer update
 composer-require:
-	PHP_VERSION=74 docker-compose run --rm composer composer require ${PACKAGE}
+	PHP_VERSION=7.4 docker-compose run --rm composer composer require ${PACKAGE}
 composer-require-dev:
-	PHP_VERSION=74 docker-compose run --rm composer composer require --dev ${PACKAGE}
+	PHP_VERSION=7.4 docker-compose run --rm composer composer require --dev ${PACKAGE}
 
 test: test-phpunit
 test-phpunit:
-	PHP_VERSION=74 docker-compose run --rm php php -v
-	PHP_VERSION=74 docker-compose run --rm php php vendor/bin/phpunit --coverage-text
+	PHP_VERSION=7.4 docker-compose run --rm php php -v
+	PHP_VERSION=7.4 docker-compose run --rm php php vendor/bin/phpunit --coverage-text
 	make qa-psalm
 	make qa-infection
 test-phpunit-local:
@@ -20,11 +20,11 @@ test-phpunit-local:
 	php vendor/bin/infection
 
 travis:
-	PHP_VERSION=71 make travis-job
-	PHP_VERSION=72 make travis-job
-	PHP_VERSION=73 make travis-job
-	PHP_VERSION=74 make travis-job
-	PHP_VERSION=74 docker-compose run --rm composer composer config --unset platform
+	PHP_VERSION=7.1.3 make travis-job
+	PHP_VERSION=7.2 make travis-job
+	PHP_VERSION=7.3 make travis-job
+	PHP_VERSION=7.4 make travis-job
+	PHP_VERSION=7.4 docker-compose run --rm composer composer config --unset platform
 travis-job:
 	docker-compose run --rm composer composer config platform.php ${PHP_VERSION}
 	docker-compose run --rm composer composer update -q
@@ -33,9 +33,9 @@ travis-job:
 	PHP_VERSION=${PHP_VERSION} docker-compose run --rm php php vendor/bin/psalm --no-cache
 
 qa-psalm:
-	PHP_VERSION=74 docker-compose run --rm php php vendor/bin/psalm --no-cache
+	PHP_VERSION=7.4 docker-compose run --rm php php vendor/bin/psalm --no-cache
 qa-infection:
-	PHP_VERSION=74 docker-compose run --rm php php vendor/bin/infection
+	PHP_VERSION=7.4 docker-compose run --rm php php vendor/bin/infection
 
 run-php:
-	PHP_VERSION=74 docker-compose run --rm php php ${FILE}
+	PHP_VERSION=7.4 docker-compose run --rm php php ${FILE}
