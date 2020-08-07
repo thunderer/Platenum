@@ -102,9 +102,8 @@ trait EnumTrait
 
     /* --- EXCEPTIONS --- */
 
-    protected static function throwInvalidMemberException(string $member): void
+    private static function throwInvalidMemberException(string $member): void
     {
-        static::throwDefaultInvalidMemberException($member);
     }
 
     private static function throwDefaultInvalidMemberException(string $member): void
@@ -113,9 +112,8 @@ trait EnumTrait
     }
 
     /** @param mixed $value */
-    protected static function throwInvalidValueException($value): void
+    private static function throwInvalidValueException($value): void
     {
-        static::throwDefaultInvalidValueException($value);
     }
 
     /** @param mixed $value */
@@ -188,29 +186,23 @@ trait EnumTrait
     /** @return int|string */
     final public static function memberToValue(string $member)
     {
-        static::resolveMembers();
-
-        $class = static::class;
         if(false === static::memberExists($member)) {
             static::throwInvalidMemberException($member);
             static::throwDefaultInvalidMemberException($member);
         }
 
-        return static::$members[$class][$member];
+        return static::$members[static::class][$member];
     }
 
     /** @param int|string $value */
     final public static function valueToMember($value): string
     {
-        static::resolveMembers();
-
-        $class = static::class;
         if(false === static::valueExists($value)) {
             static::throwInvalidValueException($value);
             static::throwDefaultInvalidValueException($value);
         }
 
-        return (string)array_search($value, static::$members[$class], true);
+        return (string)array_search($value, static::$members[static::class], true);
     }
 
     final public static function getMembers(): array
@@ -243,13 +235,14 @@ trait EnumTrait
             return;
         }
 
+        $throwMissingResolve = function(string $class): void {
+            throw PlatenumException::fromMissingResolve($class);
+        };
         // reflection instead of method_exists because of PHP 7.4 bug #78632
         // @see https://bugs.php.net/bug.php?id=78632
-        if(false === (new \ReflectionClass($class))->hasMethod('resolve')) {
-            throw PlatenumException::fromMissingResolve($class);
-        }
+        $hasResolve = (new \ReflectionClass($class))->hasMethod('resolve');
         /** @var array<string,int|string> $members */
-        $members = static::resolve();
+        $members = $hasResolve ? static::resolve() : $throwMissingResolve($class);
         if(empty($members)) {
             throw PlatenumException::fromEmptyMembers($class);
         }

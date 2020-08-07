@@ -43,7 +43,8 @@ final class PlatenumDoctrineType extends Type
     {
         /** @psalm-suppress MissingClosureParamType */
         $toString = function($value): string {
-            return (string)$value;
+            /** @psalm-suppress MixedArgument */
+            return strval($value);
         };
         $sql = function(array $declaration, AbstractPlatform $platform): string {
             return $platform->getVarcharTypeDeclarationSQL([]);
@@ -86,14 +87,18 @@ final class PlatenumDoctrineType extends Type
         $traits = [];
 
         do {
-            $traits = array_merge(class_uses($class, true), $traits);
+            foreach(class_uses($class, true) as $fqcn) {
+                $traits[] = $fqcn;
+            }
         } while($class = get_parent_class($class));
 
         foreach ($traits as $trait => $same) {
-            $traits = array_merge(class_uses($trait, true), $traits);
+            foreach(class_uses($same, true) as $fqcn) {
+                $traits[] = $fqcn;
+            }
         }
 
-        return array_values(array_unique($traits));
+        return $traits;
     }
 
     public function getName(): string

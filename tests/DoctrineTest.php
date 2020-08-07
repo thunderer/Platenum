@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Thunder\Platenum\Tests;
 
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\Mapping\Driver\StaticPHPDriver;
@@ -45,5 +46,36 @@ final class DoctrineTest extends AbstractTestCase
         $this->assertSame($entity->getIntValue(), $foundEntity->getIntValue());
         $this->assertSame($entity->getStringValue(), $foundEntity->getStringValue());
         $this->assertNull($foundEntity->getNullableValue());
+    }
+
+    public function testDoctrineType(): void
+    {
+        PlatenumDoctrineType::registerInteger('intEnum0', DoctrineIntEnum::class);
+        $intType = PlatenumDoctrineType::getType('intEnum0');
+
+        $platform = new MySqlPlatform();
+        $this->assertTrue($intType->requiresSQLCommentHint($platform));
+        $this->assertSame('intEnum0', $intType->getName());
+        $this->assertSame('INT', $intType->getSQLDeclaration([], $platform));
+
+        PlatenumDoctrineType::registerString('stringEnum0', DoctrineStringEnum::class);
+        $stringType = PlatenumDoctrineType::getType('stringEnum0');
+        $this->assertSame('VARCHAR(255)', $stringType->getSQLDeclaration([], $platform));
+    }
+
+    public function testInvalidClass(): void
+    {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('PlatenumDoctrineType allows only Platenum enumerations, `stdClass` given.');
+        PlatenumDoctrineType::registerInteger('invalid', \stdClass::class);
+    }
+
+    public function testDuplicateAlias(): void
+    {
+        PlatenumDoctrineType::registerString('enumX', DoctrineIntEnum::class);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Alias `'.DoctrineIntEnum::class.'` was already registered in PlatenumDoctrineType.');
+        PlatenumDoctrineType::registerString('enumX', DoctrineIntEnum::class);
     }
 }

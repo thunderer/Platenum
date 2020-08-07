@@ -11,13 +11,15 @@ test: test-phpunit
 test-phpunit:
 	PHP_VERSION=7.4 docker-compose run --rm php php -v
 	PHP_VERSION=7.4 docker-compose run --rm php php vendor/bin/phpunit --coverage-text
+	make test-infection
 	make qa-psalm
-	make qa-infection
 test-phpunit-local:
 	php -v
 	php vendor/bin/phpunit --coverage-text
 	php vendor/bin/psalm --no-cache
 	php vendor/bin/infection
+test-infection:
+	PHP_VERSION=7.4 docker-compose run --rm php php vendor/bin/infection -j2
 
 travis:
 	PHP_VERSION=7.1.3 make travis-job
@@ -34,8 +36,6 @@ travis-job:
 
 qa-psalm:
 	PHP_VERSION=7.4 docker-compose run --rm php php vendor/bin/psalm --no-cache
-qa-infection:
-	PHP_VERSION=7.4 docker-compose run --rm php php vendor/bin/infection
 
 run-php:
 	PHP_VERSION=7.4 docker-compose run --rm php php ${FILE}
