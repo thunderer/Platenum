@@ -10,7 +10,7 @@ services:
 
   php:
     build:
-      context: docker
+      context: docker/php
       args:
         PHP_VERSION: ${PHP_VERSION}
     volumes:
