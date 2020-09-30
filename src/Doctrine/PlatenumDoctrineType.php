@@ -108,12 +108,20 @@ final class PlatenumDoctrineType extends Type
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
+        if (null === $value || '' === $value) {
+            return null;
+        }
+
         /** @psalm-suppress MixedMethodCall */
         return ($this->platenumCallback)($value->getValue());
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
+        if (null === $value || '' === $value) {
+            return null;
+        }
+
         /** @psalm-suppress MixedMethodCall */
         return ($this->platenumClass)::fromValue(($this->platenumCallback)($value));
     }
