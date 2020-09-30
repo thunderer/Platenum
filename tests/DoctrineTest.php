@@ -22,7 +22,8 @@ final class DoctrineTest extends AbstractTestCase
         $connection->exec('CREATE TABLE doctrine_entity (
             id INTEGER NOT NULL PRIMARY KEY,
             int_value INTEGER NOT NULL,
-            string_value VARCHAR(20) NOT NULL
+            string_value VARCHAR(20) NOT NULL,
+            nullable_value VARCHAR(20) NULL
         )');
         $configuration = new Configuration();
         $configuration->setMetadataDriverImpl(new StaticPHPDriver([__DIR__.'/Fake']));
@@ -43,5 +44,6 @@ final class DoctrineTest extends AbstractTestCase
         $this->assertSame($entity->getId(), $foundEntity->getId());
         $this->assertSame($entity->getIntValue(), $foundEntity->getIntValue());
         $this->assertSame($entity->getStringValue(), $foundEntity->getStringValue());
+        $this->assertNull($foundEntity->getNullableValue());
     }
 }

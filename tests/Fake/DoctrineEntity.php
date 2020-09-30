@@ -10,12 +10,18 @@ final class DoctrineEntity
     private $id;
     private $intValue;
     private $stringValue;
+    private $nullableValue;
 
-    public function __construct(int $id, DoctrineIntEnum $int, DoctrineStringEnum $string)
-    {
+    public function __construct(
+        int $id,
+        DoctrineIntEnum $int,
+        DoctrineStringEnum $string,
+        ?DoctrineStringEnum $nullableString = null
+    ) {
         $this->id = $id;
         $this->intValue = $int;
         $this->stringValue = $string;
+        $this->nullableValue = $nullableString;
     }
 
     public static function loadMetadata(ClassMetadata $metadata)
@@ -25,6 +31,7 @@ final class DoctrineEntity
         $metadata->mapField(['id' => true, 'fieldName' => 'id', 'type' => 'integer']);
         $metadata->mapField(['fieldName' => 'intValue', 'columnName' => 'int_value', 'type' => 'intEnum']);
         $metadata->mapField(['fieldName' => 'stringValue', 'columnName' => 'string_value', 'type' => 'stringEnum']);
+        $metadata->mapField(['fieldName' => 'nullableValue', 'columnName' => 'nullable_value', 'type' => 'stringEnum', 'nullable' => true]);
     }
 
     public function getId()
@@ -40,5 +47,10 @@ final class DoctrineEntity
     public function getStringValue(): DoctrineStringEnum
     {
         return $this->stringValue;
+    }
+
+    public function getNullableValue(): ?DoctrineStringEnum
+    {
+        return $this->nullableValue;
     }
 }
