@@ -51,6 +51,7 @@ trait EnumTrait
             static::throwDefaultInvalidMemberException($member);
         }
 
+        /** @psalm-suppress UnsafeInstantiation */
         return static::$instances[$class][$member] = new static($member, static::$members[$class][$member]);
     }
 

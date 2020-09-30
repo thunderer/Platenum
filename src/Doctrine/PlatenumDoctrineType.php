@@ -101,9 +101,12 @@ final class PlatenumDoctrineType extends Type
         return $this->platenumAlias;
     }
 
-    public function getSQLDeclaration(array $declaration, AbstractPlatform $platform): string
+    /**
+     * @psalm-suppress ParamNameMismatch
+     */
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        return ($this->platenumSql)($declaration, $platform);
+        return ($this->platenumSql)($column, $platform);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
