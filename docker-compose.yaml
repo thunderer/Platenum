@@ -12,7 +12,7 @@ services:
     build:
       context: docker/php
       args:
-        PHP_VERSION: ${PHP_VERSION}
+        PHP_VERSION: ${PHP_VERSION:-7.4}
     volumes:
       - .:/app
     working_dir: /app
