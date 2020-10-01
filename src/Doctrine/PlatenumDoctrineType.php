@@ -111,7 +111,7 @@ final class PlatenumDoctrineType extends Type
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (null === $value || '' === $value) {
+        if (null === $value) {
             return null;
         }
 
@@ -121,7 +121,7 @@ final class PlatenumDoctrineType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if (null === $value || '' === $value) {
+        if (null === $value) {
             return null;
         }
 
