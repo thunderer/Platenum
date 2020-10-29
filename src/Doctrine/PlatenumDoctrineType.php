@@ -6,7 +6,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Thunder\Platenum\Enum\EnumTrait;
 
-/** @psalm-suppress PropertyNotSetInConstructor */
+/** @psalm-suppress PropertyNotSetInConstructor, MissingConstructor */
 final class PlatenumDoctrineType extends Type
 {
     /** @var class-string */
@@ -15,12 +15,12 @@ final class PlatenumDoctrineType extends Type
     private $platenumAlias;
     /** @var callable */
     private $platenumCallback;
-    /** @var callable(array,AbstractPlatform):string */
+    /** @psalm-var callable(array,AbstractPlatform):string */
     private $platenumSql;
 
     /**
      * @param string $alias
-     * @param class-string $class
+     * @psalm-param class-string $class
      */
     public static function registerInteger(string $alias, string $class): void
     {
@@ -37,14 +37,13 @@ final class PlatenumDoctrineType extends Type
 
     /**
      * @param string $alias
-     * @param class-string $class
+     * @psalm-param class-string $class
      */
     public static function registerString(string $alias, string $class): void
     {
         /** @psalm-suppress MissingClosureParamType */
         $toString = function($value): string {
-            /** @psalm-suppress MixedArgument */
-            return strval($value);
+            return (string)$value;
         };
         $sql = function(array $declaration, AbstractPlatform $platform): string {
             return $platform->getVarcharTypeDeclarationSQL([]);
@@ -55,16 +54,16 @@ final class PlatenumDoctrineType extends Type
 
     /**
      * @param string $alias
-     * @param class-string $class
+     * @psalm-param class-string $class
      * @param callable $callback
-     * @param callable(array<mixed>,AbstractPlatform):string $sql
+     * @psalm-param callable(array<mixed>,AbstractPlatform):string $sql
      */
     private static function registerCallback(string $alias, string $class, callable $callback, callable $sql): void
     {
         if(static::hasType($alias)) {
             throw new \LogicException(sprintf('Alias `%s` was already registered in PlatenumDoctrineType.', $class));
         }
-        if(false === in_array(EnumTrait::class, static::allTraitsOf($class))) {
+        if(false === in_array(EnumTrait::class, static::allTraitsOf($class), true)) {
             throw new \LogicException(sprintf('PlatenumDoctrineType allows only Platenum enumerations, `%s` given.', $class));
         }
 
@@ -116,6 +115,10 @@ final class PlatenumDoctrineType extends Type
     {
         if (null === $value) {
             return null;
+        }
+        if(false === is_object($value)) {
+            $message = 'Impossible situation: `%s` allows to register only Platenum types, `%s` given.';
+            throw new \LogicException(sprintf($message, static::class, gettype($value)));
         }
 
         /** @psalm-suppress MixedMethodCall */
