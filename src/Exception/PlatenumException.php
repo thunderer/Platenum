@@ -65,7 +65,11 @@ final class PlatenumException extends \LogicException
 
     public static function fromNonUniformMemberValues(string $fqcn, array $members): self
     {
-        return new self(sprintf('Enum `%s` member values must be of the same type, `%s` given.', $fqcn, implode(',', array_unique(array_map('gettype', $members)))));
+        /** @psalm-suppress MissingClosureParamType */
+        $callback = function($value): string { return gettype($value); };
+        $values = array_unique(array_map($callback, $members));
+
+        return new self(sprintf('Enum `%s` member values must be of the same type, `%s` given.', $fqcn, implode(',', $values)));
     }
 
     /* --- DOCBLOCK --- */

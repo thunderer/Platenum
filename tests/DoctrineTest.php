@@ -78,4 +78,18 @@ final class DoctrineTest extends AbstractTestCase
         $this->expectExceptionMessage('Alias `'.DoctrineIntEnum::class.'` was already registered in PlatenumDoctrineType.');
         PlatenumDoctrineType::registerString('enumX', DoctrineIntEnum::class);
     }
+
+    public function testImpossibleDatabaseConversionWithUnsupportedValue(): void
+    {
+        PlatenumDoctrineType::registerString('impossibleEnumConvert', DoctrineIntEnum::class);
+        $this->expectException(\LogicException::class);
+        PlatenumDoctrineType::getType('impossibleEnumConvert')->convertToDatabaseValue('not an object', new MySqlPlatform());
+    }
+
+    public function testImpossibleValueConversionCast(): void
+    {
+        PlatenumDoctrineType::registerString('impossibleEnumCast', DoctrineIntEnum::class);
+        $result = PlatenumDoctrineType::getType('impossibleEnumCast')->convertToDatabaseValue(DoctrineIntEnum::FIRST(), new MySqlPlatform());
+        $this->assertSame('1', $result, $result);
+    }
 }
