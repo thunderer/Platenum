@@ -1,16 +1,22 @@
+PHP_VERSION ?= 7.4
+COMPOSER := docker-compose run --rm composer
+PHP := docker-compose run --rm php-${PHP_VERSION}
+
 composer-install:
-	PHP_VERSION=7.4 docker-compose run --rm composer composer install
+	${COMPOSER} composer install
+composer-self-update:
+	${COMPOSER} composer self-update
 composer-update:
-	PHP_VERSION=7.4 docker-compose run --rm composer composer update
+	${COMPOSER} composer update
 composer-require:
-	PHP_VERSION=7.4 docker-compose run --rm composer composer require ${PACKAGE}
+	${COMPOSER} composer require ${PACKAGE}
 composer-require-dev:
-	PHP_VERSION=7.4 docker-compose run --rm composer composer require --dev ${PACKAGE}
+	${COMPOSER} composer require --dev ${PACKAGE}
 
 test: test-phpunit
 test-phpunit:
-	PHP_VERSION=7.4 docker-compose run --rm php php -v
-	PHP_VERSION=7.4 docker-compose run --rm php php vendor/bin/phpunit --coverage-text
+	${PHP} php -v
+	${PHP} php vendor/bin/phpunit --coverage-text
 	make test-infection
 	make qa-psalm
 test-phpunit-local:
@@ -19,7 +25,7 @@ test-phpunit-local:
 	php vendor/bin/psalm --no-cache
 	php vendor/bin/infection
 test-infection:
-	PHP_VERSION=7.4 docker-compose run --rm php php vendor/bin/infection -j2
+	${PHP} php vendor/bin/infection -j2
 
 travis:
 	PHP_VERSION=7.1.3 make travis-job
@@ -29,13 +35,13 @@ travis:
 	PHP_VERSION=7.4 docker-compose run --rm composer composer config --unset platform
 travis-job:
 	docker-compose run --rm composer composer config platform.php ${PHP_VERSION}
-	docker-compose run --rm composer composer update -q
-	PHP_VERSION=${PHP_VERSION} docker-compose run --rm php php -v
-	PHP_VERSION=${PHP_VERSION} docker-compose run --rm php php vendor/bin/phpunit
-	PHP_VERSION=${PHP_VERSION} docker-compose run --rm php php vendor/bin/psalm --no-cache
+	docker-compose run --rm composer composer update
+	${PHP} php -v
+	${PHP} php vendor/bin/phpunit
+	${PHP} php vendor/bin/psalm --no-cache
 
 qa-psalm:
-	PHP_VERSION=7.4 docker-compose run --rm php php vendor/bin/psalm --no-cache
+	${PHP} php vendor/bin/psalm --no-cache
 
 run-php:
-	PHP_VERSION=7.4 docker-compose run --rm php php ${FILE}
+	${PHP} php ${FILE}

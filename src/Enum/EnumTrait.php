@@ -58,7 +58,6 @@ trait EnumTrait
     /**
      * @param mixed $value
      * @return static
-     * @psalm-suppress MoreSpecificReturnType
      */
     final public static function fromValue($value): self
     {

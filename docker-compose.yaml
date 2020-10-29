@@ -4,15 +4,10 @@ services:
 
   composer:
     image: composer
-    volumes:
-      - .:/app
-    working_dir: /app
+    volumes: ['.:/app']
+    working_dir: '/app'
 
-  php:
-    build:
-      context: docker/php
-      args:
-        PHP_VERSION: ${PHP_VERSION:-7.4}
-    volumes:
-      - .:/app
-    working_dir: /app
+  php-7.1.3: { image: 'php:7.1.3', volumes: ['.:/app'], working_dir: /app }
+  php-7.2:   { image: 'php:7.2',   volumes: ['.:/app'], working_dir: /app }
+  php-7.3:   { image: 'php:7.3',   volumes: ['.:/app'], working_dir: /app }
+  php-7.4:   { image: 'php:7.4',   volumes: ['.:/app'], working_dir: /app }
