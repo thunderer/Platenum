@@ -6,9 +6,12 @@ use Thunder\Platenum\Exception\PlatenumException;
 
 /**
  * @author Tomasz Kowalczyk <tomasz@kowalczyk.cc>
+ * @psalm-template T
+ * @psalm-immutable
  */
 trait CallbackEnumTrait
 {
+    /** @use EnumTrait<T> */
     use EnumTrait;
 
     /** @var non-empty-array<class-string,callable():array<string,int|string>> */

@@ -6,7 +6,10 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Thunder\Platenum\Enum\EnumTrait;
 
-/** @psalm-suppress PropertyNotSetInConstructor, MissingConstructor */
+/**
+ * @psalm-suppress PropertyNotSetInConstructor, MissingConstructor
+ * @psalm-external-mutation-free
+ */
 final class PlatenumDoctrineType extends Type
 {
     /** @var class-string */
