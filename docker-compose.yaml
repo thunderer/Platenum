@@ -5,3 +5,4 @@ services:
   php-7.2: { build: { context: docker/php, args: { PHP_VERSION: 7.2   } }, volumes: ['.:/app'], working_dir: '/app' }
   php-7.3: { build: { context: docker/php, args: { PHP_VERSION: 7.3   } }, volumes: ['.:/app'], working_dir: '/app' }
   php-7.4: { build: { context: docker/php, args: { PHP_VERSION: 7.4   } }, volumes: ['.:/app'], working_dir: '/app' }
+  php-8.0: { build: { context: docker/php, args: { PHP_VERSION: 8.0.0RC5 } }, volumes: ['.:/app'], working_dir: '/app' }

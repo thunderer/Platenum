@@ -9,7 +9,7 @@ trait ConstantsEnumTrait
 {
     use EnumTrait;
 
-    final private static function resolve(): array
+    private static function resolve(): array
     {
         return (new \ReflectionClass(static::class))->getConstants();
     }
