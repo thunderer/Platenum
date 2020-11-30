@@ -24,7 +24,7 @@ trait CallbackEnumTrait
         static::$callbacks[static::class] = $callback;
     }
 
-    final private static function resolve(): array
+    private static function resolve(): array
     {
         $class = static::class;
         if(false === (array_key_exists($class, static::$callbacks) && is_callable(static::$callbacks[$class]))) {

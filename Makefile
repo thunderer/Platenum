@@ -32,6 +32,7 @@ travis:
 	PHP_VERSION=7.2 make travis-job
 	PHP_VERSION=7.3 make travis-job
 	PHP_VERSION=7.4 make travis-job
+	PHP_VERSION=8.0 make travis-job
 travis-job:
 	${PHP} composer update
 	${PHP} php -v

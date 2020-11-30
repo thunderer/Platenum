@@ -227,7 +227,7 @@ trait EnumTrait
 
     /* --- SOURCE --- */
 
-    final private static function resolveMembers(): void
+    private static function resolveMembers(): void
     {
         $class = static::class;
         if(isset(static::$members[$class])) {

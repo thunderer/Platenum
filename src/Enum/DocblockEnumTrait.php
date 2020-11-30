@@ -11,7 +11,7 @@ trait DocblockEnumTrait
 {
     use EnumTrait;
 
-    final private static function resolve(): array
+    private static function resolve(): array
     {
         $class = static::class;
         $doc = (new \ReflectionClass($class))->getDocComment();

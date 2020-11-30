@@ -11,7 +11,7 @@ trait StaticEnumTrait
 {
     use EnumTrait;
 
-    final private static function resolve(): array
+    private static function resolve(): array
     {
         $class = static::class;
         // reflection instead of property_exists because of PHP 7.4 bug #78632
