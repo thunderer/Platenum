@@ -1,6 +1,7 @@
 {
     "source": {
-        "directories": ["src"]
+        "directories": ["src"],
+        "excludes": ["Command/GenerateCommand.php"]
     },
     "logs": {
         "text": "infection.log"

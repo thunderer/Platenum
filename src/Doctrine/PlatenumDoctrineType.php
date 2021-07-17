@@ -28,6 +28,7 @@ final class PlatenumDoctrineType extends Type
         $toInteger = function($value): int {
             return (int)$value;
         };
+        /** @psalm-suppress UnusedClosureParam */
         $sql = function(array $declaration, AbstractPlatform $platform): string {
             return $platform->getIntegerTypeDeclarationSQL([]);
         };
@@ -45,6 +46,7 @@ final class PlatenumDoctrineType extends Type
         $toString = function($value): string {
             return (string)$value;
         };
+        /** @psalm-suppress UnusedClosureParam */
         $sql = function(array $declaration, AbstractPlatform $platform): string {
             return $platform->getVarcharTypeDeclarationSQL([]);
         };
@@ -91,7 +93,7 @@ final class PlatenumDoctrineType extends Type
             }
         } while($class = get_parent_class($class));
 
-        foreach ($traits as $trait => $same) {
+        foreach ($traits as /* $trait => */ $same) {
             foreach(class_uses($same, true) as $fqcn) {
                 $traits[] = $fqcn;
             }
@@ -105,7 +107,6 @@ final class PlatenumDoctrineType extends Type
         return $this->platenumAlias;
     }
 
-    /** @psalm-suppress ParamNameMismatch */
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return ($this->platenumSql)($column, $platform);

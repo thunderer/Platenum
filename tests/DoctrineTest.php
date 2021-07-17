@@ -11,6 +11,7 @@ use Thunder\Platenum\Doctrine\PlatenumDoctrineType;
 use Thunder\Platenum\Tests\Fake\DoctrineEntity;
 use Thunder\Platenum\Tests\Fake\DoctrineIntEnum;
 use Thunder\Platenum\Tests\Fake\DoctrineStringEnum;
+use Thunder\Platenum\Tests\Fake\NoTraitEnum;
 
 /**
  * @author Tomasz Kowalczyk <tomasz@kowalczyk.cc>
@@ -91,5 +92,12 @@ final class DoctrineTest extends AbstractTestCase
         PlatenumDoctrineType::registerString('impossibleEnumCast', DoctrineIntEnum::class);
         $result = PlatenumDoctrineType::getType('impossibleEnumCast')->convertToDatabaseValue(DoctrineIntEnum::FIRST(), new MySqlPlatform());
         $this->assertSame('1', $result, $result);
+    }
+
+    public function testNoTrait(): void
+    {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('PlatenumDoctrineType allows only Platenum enumerations, `'.NoTraitEnum::class.'` given.');
+        PlatenumDoctrineType::registerString('noTraitEnum', NoTraitEnum::class);
     }
 }

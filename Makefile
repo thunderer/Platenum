@@ -44,5 +44,8 @@ qa-psalm:
 qa-psalm-suppressed:
 	grep -rn psalm-suppress src
 
+clean:
+	rm -rfv .phpunit.result.cache coverage.xml coverage infection.log
+
 run-php:
 	${PHP} php ${FILE}
