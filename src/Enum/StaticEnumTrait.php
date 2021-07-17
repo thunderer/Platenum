@@ -6,9 +6,12 @@ use Thunder\Platenum\Exception\PlatenumException;
 
 /**
  * @author Tomasz Kowalczyk <tomasz@kowalczyk.cc>
+ * @psalm-template T
+ * @psalm-immutable
  */
 trait StaticEnumTrait
 {
+    /** @use EnumTrait<T> */
     use EnumTrait;
 
     private static function resolve(): array

@@ -10,6 +10,7 @@
 
     <projectFiles>
         <directory name="src" />
+        <directory name="tests/Psalm" />
         <ignoreFiles>
             <directory name="vendor" />
         </ignoreFiles>

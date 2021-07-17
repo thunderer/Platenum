@@ -6,20 +6,22 @@ use Thunder\Platenum\Exception\PlatenumException;
 
 /**
  * @author Tomasz Kowalczyk <tomasz@kowalczyk.cc>
+ * @psalm-template T
+ * @psalm-immutable
  */
 trait EnumTrait
 {
     /** @var string */
     private $member;
-    /** @var int|string */
+    /** @psalm-var T */
     private $value;
 
-    /** @var non-empty-array<string,non-empty-array<string,int|string>> */
+    /** @psalm-var non-empty-array<string,non-empty-array<string,int|string>> */
     protected static $members = [];
     /** @var array<string,array<string,static>> */
     protected static $instances = [];
 
-    /** @param int|string $value */
+    /** @psalm-param T $value */
     final private function __construct(string $member, $value)
     {
         $this->member = $member;
@@ -51,8 +53,17 @@ trait EnumTrait
             static::throwDefaultInvalidMemberException($member);
         }
 
+        return static::$instances[$class][$member] = static::fromMemberAndValue($member, static::$members[$class][$member]);
+    }
+
+    /**
+     * @psalm-param int|string $value
+     * @psalm-return static
+     */
+    final private static function fromMemberAndValue(string $member, $value): self
+    {
         /** @psalm-suppress UnsafeInstantiation */
-        return static::$instances[$class][$member] = new static($member, static::$members[$class][$member]);
+        return new static($member, $value);
     }
 
     /**
@@ -91,8 +102,8 @@ trait EnumTrait
     }
 
     /**
-     * @param static $enum
-     * @param-out AbstractConstantsEnum|AbstractDocblockEnum|AbstractStaticEnum|AbstractCallbackEnum $enum
+     * @param self &$enum
+     * @param-out self $enum
      */
     final public function fromInstance(&$enum): void
     {
@@ -140,12 +151,13 @@ trait EnumTrait
         return $this->member;
     }
 
-    /** @return int|string */
+    /** @psalm-return T */
     final public function getValue()
     {
         return $this->value;
     }
 
+    /** @psalm-return T */
     final public function jsonSerialize()
     {
         return $this->getValue();
@@ -178,7 +190,7 @@ trait EnumTrait
         return $members === $this->member;
     }
 
-    /** @param int|string $value */
+    /** @psalm-param T $value */
     final public function hasValue($value): bool
     {
         return $value === $this->value;
@@ -244,7 +256,7 @@ trait EnumTrait
         // reflection instead of method_exists because of PHP 7.4 bug #78632
         // @see https://bugs.php.net/bug.php?id=78632
         $hasResolve = (new \ReflectionClass($class))->hasMethod('resolve');
-        /** @var array<string,int|string> $members */
+        /** @psalm-var array<string,T> $members */
         $members = $hasResolve ? static::resolve() : $throwMissingResolve($class);
         if(empty($members)) {
             throw PlatenumException::fromEmptyMembers($class);
