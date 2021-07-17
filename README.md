@@ -90,38 +90,38 @@ bin/generate static Thunder\\Platenum\\YourEnum FOO,BAR=3
 
 There are multiple sources from which Platenum can read enumeration members. Base `EnumTrait` provides all enum functionality without any source, to be defined in a static `resolve()` method. Each source is available both as a `trait` which uses `EnumTrait` with concrete `resolve()` method implementation and an `abstract class` based on that trait. Usage of traits is recommended as target enum classes should not have any common type hint.
 
-In this section the `BooleanEnum` class with two members (`TRUE=true` and `FALSE=false`) will be used as an example.
+In this section the `StatusEnum` class with two members (`ACTIVE=1` and `DISABLED=2`) will be used as an example.
 
 **class constants**
 
 ```php
-final class BooleanEnum
+final class StatusEnum
 {
     use ConstantsEnumTrait;
 
-    private const TRUE = true;
-    private const FALSE = false;
+    private const ACTIVE = 1;
+    private const DISABLED = 2;
 }
 ```
 
 ```php
-final class BooleanEnum extends AbstractConstantsEnum
+final class StatusEnum extends AbstractConstantsEnum
 {
-    private const TRUE = true;
-    private const FALSE = false;
+    private const ACTIVE = 1;
+    private const DISABLED = 2;
 }
 ```
 
 **class docblock**
 
-> Note: There is no way to specify members values inside docblock, therefore all members names are also their values - in this case `TRUE='TRUE'` and `FALSE='FALSE'`.
+> Note: There is no way to specify members values inside docblock, therefore all members names are also their values - in this case `ACTIVE='ACTIVE'` and `DISABLED='DISABLED'`.
 
 ```php
 /**
- * @method static static TRUE()
- * @method static static FALSE()
+ * @method static static ACTIVE()
+ * @method static static DISABLED()
  */
-final class BooleanEnum
+final class StatusEnum
 {
     use DocblockEnumTrait;
 }
@@ -129,32 +129,53 @@ final class BooleanEnum
 
 ```php
 /**
- * @method static static TRUE()
- * @method static static FALSE()
+ * @method static static ACTIVE()
+ * @method static static DISABLED()
  */
-final class BooleanEnum extends AbstractDocblockEnum {}
+final class StatusEnum extends AbstractDocblockEnum {}
+```
+
+**attributes (PHP 8.0)**
+
+Leverage PHP 8.0 features by declaring members through attributes:
+
+```php
+#[Member('ACTIVE', 1)]
+#[Member('DISABLED', 2)]
+final class StatusEnum
+{
+    use AttributeEnumTrait;
+}
+```
+
+```php
+use Thunder\Platenum\Enum\Member;
+
+#[Member(member: 'ACTIVE',   value: 1)]
+#[Member(member: 'DISABLED', value: 2)]
+final class StatusEnum extends AbstractAttributeEnum {}
 ```
 
 **static property**
 
 ```php
-final class BooleanEnum
+final class StatusEnum
 {
     use StaticEnumTrait;
 
     private static $mapping = [
-        'TRUE' => true,
-        'FALSE' => false,
+        'ACTIVE' => 1,
+        'DISABLED' => 2,
     ];
 }
 ```
 
 ```php
-final class BooleanEnum extends AbstractStaticEnum
+final class StatusEnum extends AbstractStaticEnum
 {
     private static $mapping = [
-        'TRUE' => true,
-        'FALSE' => false,
+        'ACTIVE' => 1,
+        'DISABLED' => 2,
     ];
 }
 ```
@@ -199,15 +220,15 @@ Currency::initialize(fn() => json_decode(file_get_contents('...')));
 > Note: The `resolve` method will be called only once when the enumeration is used for the first time.
 
 ```php
-final class BooleanEnum
+final class StatusEnum
 {
     use EnumTrait;
 
     private static function resolve(): array
     {
         return [
-            'TRUE' => true,
-            'FALSE' => false,
+            'ACTIVE' => 1,
+            'DISABLED' => 2,
         ];
     }
 }
@@ -281,7 +302,7 @@ There are already a few `enum` libraries in the PHP ecosystem. Why another one? 
 
 **Sources** Platenum allows multiple sources for enumeration members. `EnumTrait` contains all enum functions - extend it with your custom `resolve()` method to create custom source. In fact, all enumeration sources in this repository are defined this way.
 
-**Features** Platenum provides complete feature set for all kinds of operations on enumeration members, values, comparison, transformation, and more. Look at PhpEnumerations project to see the feature matrix created during development of this library.
+**Features** Platenum provides complete feature set for all kinds of operations on enumeration members, values, comparison, transformation, and more. Look at [PhpEnumerations](https://github.com/thunderer/PhpEnumerations) project to see the feature matrix created during development of this library.
 
 **Inheritance** Existing solutions use inheritance for creating enum classes:
 
