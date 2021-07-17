@@ -101,6 +101,7 @@ trait EnumTrait
 
     /* --- EXCEPTIONS --- */
 
+    /** @psalm-suppress UnusedParam */
     private static function throwInvalidMemberException(string $member): void
     {
     }
@@ -110,7 +111,10 @@ trait EnumTrait
         throw PlatenumException::fromInvalidMember(static::class, $member, static::$members[static::class]);
     }
 
-    /** @param mixed $value */
+    /**
+     * @param mixed $value
+     * @psalm-suppress UnusedParam
+     */
     private static function throwInvalidValueException($value): void
     {
     }
@@ -248,7 +252,6 @@ trait EnumTrait
         if(\count($members) !== \count(\array_unique($members))) {
             throw PlatenumException::fromNonUniqueMembers($class);
         }
-        /** @psalm-suppress RedundantCondition */
         if(['string'] !== \array_unique(\array_map('gettype', array_keys($members)))) {
             throw PlatenumException::fromNonStringMembers($class);
         }

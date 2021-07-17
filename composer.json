@@ -17,8 +17,8 @@
         "ext-json": "*",
         "phpunit/phpunit": ">=6.0",
         "vimeo/psalm": ">=3.14",
-        "doctrine/dbal": "^2.9",
-        "doctrine/orm": "^2.7",
+        "doctrine/dbal": "^2.13",
+        "doctrine/orm": "^2.9",
         "infection/infection": ">=0.13"
     },
     "autoload": {

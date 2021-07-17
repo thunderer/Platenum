@@ -9,7 +9,8 @@
     processIsolation = "false"
     stopOnFailure = "false"
     bootstrap = "vendor/autoload.php"
-    >
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
 
     <testsuites>
         <testsuite name="Platenum">
@@ -17,14 +18,13 @@
         </testsuite>
     </testsuites>
 
-    <logging>
-        <log type="coverage-html" target="coverage" lowUpperBound="50" highLowerBound="90"/>
-        <log type="coverage-clover" target="coverage.xml"/>
-    </logging>
-
-    <filter>
-        <whitelist>
-            <directory>./src</directory>
-        </whitelist>
-    </filter>
+    <coverage>
+        <include>
+            <directory>src</directory>
+        </include>
+        <report>
+            <clover outputFile="coverage.xml" />
+            <html outputDirectory="coverage" lowUpperBound="50" highLowerBound="90" />
+        </report>
+    </coverage>
 </phpunit>
