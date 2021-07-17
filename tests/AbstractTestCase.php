@@ -3,14 +3,17 @@ declare(strict_types=1);
 namespace Thunder\Platenum\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Thunder\Platenum\Enum\AbstractAttributeEnum;
 use Thunder\Platenum\Enum\AbstractCallbackEnum;
 use Thunder\Platenum\Enum\AbstractConstantsEnum;
 use Thunder\Platenum\Enum\AbstractDocblockEnum;
 use Thunder\Platenum\Enum\AbstractStaticEnum;
+use Thunder\Platenum\Enum\AttributeEnumTrait;
 use Thunder\Platenum\Enum\CallbackEnumTrait;
 use Thunder\Platenum\Enum\ConstantsEnumTrait;
 use Thunder\Platenum\Enum\DocblockEnumTrait;
 use Thunder\Platenum\Enum\EnumTrait;
+use Thunder\Platenum\Enum\Member;
 use Thunder\Platenum\Enum\StaticEnumTrait;
 use Thunder\Platenum\Tests\Fake\FakeEnum;
 
@@ -134,6 +137,34 @@ abstract class AbstractTestCase extends TestCase
     {
         $class = $this->computeUniqueClassName('CallbackExtends');
         eval('final class '.$class.' extends '.AbstractCallbackEnum::class.' { }');
+
+        return $class;
+    }
+
+    /** @return FakeEnum */
+    protected function makeAttributeTraitEnum(array $members): string
+    {
+        $attributes = [];
+        foreach($members as $member => $value) {
+            $attributes[] = '#['.Member::class.'(\''.$member.'\', '.$value.')]';
+        }
+
+        $class = $this->computeUniqueClassName('AttributeTrait');
+        eval(implode("\n", $attributes)."\n".'final class '.$class.' implements \JsonSerializable { use '.AttributeEnumTrait::class.'; }');
+
+        return $class;
+    }
+
+    /** @return FakeEnum */
+    protected function makeAttributeExtendsEnum(array $members): string
+    {
+        $attributes = [];
+        foreach($members as $member => $value) {
+            $attributes[] = '#['.Member::class.'(\''.$member.'\', '.$value.')]';
+        }
+
+        $class = $this->computeUniqueClassName('AttributeExtends');
+        eval(implode("\n", $attributes)."\n".'final class '.$class.' extends '.AbstractAttributeEnum::class.' {}');
 
         return $class;
     }

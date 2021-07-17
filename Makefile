@@ -40,7 +40,7 @@ travis-job:
 	${PHP} php vendor/bin/psalm --no-cache
 
 qa-psalm:
-	${PHP} php vendor/bin/psalm --no-cache
+	${PHP} php vendor/bin/psalm --no-cache --find-unused-psalm-suppress
 qa-psalm-suppressed:
 	grep -rn psalm-suppress src
 
