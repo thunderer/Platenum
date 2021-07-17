@@ -92,7 +92,7 @@ trait EnumTrait
 
     /**
      * @param static $enum
-     * @param-out AbstractConstantsEnum|AbstractDocblockEnum|AbstractStaticEnum|AbstractCallbackEnum $enum
+     * @param-out AbstractConstantsEnum|AbstractDocblockEnum|AbstractStaticEnum|AbstractCallbackEnum|AbstractAttributeEnum $enum
      */
     final public function fromInstance(&$enum): void
     {
