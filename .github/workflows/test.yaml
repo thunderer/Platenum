@@ -37,5 +37,5 @@ jobs:
         run: 'php vendor/bin/psalm --no-cache --shepherd'
         continue-on-error: '${{ matrix.failure }}'
       - name: 'Infection'
-        run: 'php vendor/bin/infection -j2 --min-msi=98'
+        run: 'php vendor/bin/infection -j2 --min-msi=97'
         continue-on-error: '${{ matrix.failure }}'
