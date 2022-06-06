@@ -35,5 +35,8 @@
         "ext-json": "Allow JSON serializable enumerations."
     },
     "config": {
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
     }
 }

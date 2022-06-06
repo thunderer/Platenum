@@ -80,10 +80,7 @@ final class GenerateCommand
     {
         $prefix = '';
         $path = '';
-        /**
-         * @var string $ns
-         * @var string[] $paths
-         */
+        /** @var string[] $paths */
         foreach($this->classLoader->getPrefixesPsr4() as $ns => $paths) {
             if(0 === strpos($fqcn, $ns)) {
                 $prefix = $ns;

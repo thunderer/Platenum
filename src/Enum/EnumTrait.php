@@ -146,6 +146,7 @@ trait EnumTrait
         return $this->value;
     }
 
+    #[\ReturnTypeWillChange]
     final public function jsonSerialize()
     {
         return $this->getValue();
