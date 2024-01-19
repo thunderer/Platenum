@@ -105,7 +105,7 @@ final class GenerateCommand
     private function generateClassCode(string $type, string $fqcn, string $keys): string
     {
         $namespace = $fqcn;
-        $lastSlash = strrpos($namespace, '\\');
+        $lastSlash = (int)strrpos($namespace, '\\');
         $class = substr($namespace, $lastSlash ? $lastSlash + 1 : 0);
         $namespace = $lastSlash ? substr($namespace, 0, $lastSlash) : 'X';
 
@@ -123,6 +123,7 @@ final class GenerateCommand
         for($i = 0; $i < $count; $i++) {
             $key = $matches['key'][$i];
             $value = $matches['value'][$i] ?: $index++;
+            /** @psalm-suppress TypeDoesNotContainType */
             if(false === ctype_digit((string)$value)) {
                 $value = '\''.$value.'\'';
             }
@@ -146,6 +147,7 @@ final class GenerateCommand
             '<MEMBERS>' => $values[$type]['members'],
         ];
 
+        /** @psalm-suppress InvalidArgument */
         return str_replace(array_keys($replaces), array_values($replaces), $values[$type]['template']);
     }
 

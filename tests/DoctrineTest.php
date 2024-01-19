@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Thunder\Platenum\Tests;
 
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Platforms\MySQL80Platform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
@@ -54,7 +55,7 @@ final class DoctrineTest extends AbstractTestCase
         PlatenumDoctrineType::registerInteger('intEnum0', DoctrineIntEnum::class);
         $intType = PlatenumDoctrineType::getType('intEnum0');
 
-        $platform = new MySqlPlatform();
+        $platform = new MySQL80Platform();
         $this->assertTrue($intType->requiresSQLCommentHint($platform));
         $this->assertSame('intEnum0', $intType->getName());
         $this->assertSame('INT', $intType->getSQLDeclaration([], $platform));
@@ -84,13 +85,13 @@ final class DoctrineTest extends AbstractTestCase
     {
         PlatenumDoctrineType::registerString('impossibleEnumConvert', DoctrineIntEnum::class);
         $this->expectException(\LogicException::class);
-        PlatenumDoctrineType::getType('impossibleEnumConvert')->convertToDatabaseValue('not an object', new MySqlPlatform());
+        PlatenumDoctrineType::getType('impossibleEnumConvert')->convertToDatabaseValue('not an object', new MySql80Platform());
     }
 
     public function testImpossibleValueConversionCast(): void
     {
         PlatenumDoctrineType::registerString('impossibleEnumCast', DoctrineIntEnum::class);
-        $result = PlatenumDoctrineType::getType('impossibleEnumCast')->convertToDatabaseValue(DoctrineIntEnum::FIRST(), new MySqlPlatform());
+        $result = PlatenumDoctrineType::getType('impossibleEnumCast')->convertToDatabaseValue(DoctrineIntEnum::FIRST(), new MySql80Platform());
         $this->assertSame('1', $result, $result);
     }
 

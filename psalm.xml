@@ -13,4 +13,23 @@
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
+
+    <issueHandlers>
+        <UnusedClosureParam errorLevel="error">
+            <errorLevel type="suppress">
+                <file name="src/Doctrine/PlatenumDoctrineType.php" />
+            </errorLevel>
+        </UnusedClosureParam>
+        <UnusedPsalmSuppress errorLevel="error">
+            <errorLevel type="suppress">
+                <file name="src/Enum/AttributeEnumTrait.php" />
+            </errorLevel>
+        </UnusedPsalmSuppress>
+        <DeprecatedMethod errorLevel="error">
+            <errorLevel type="suppress">
+                <file name="src/Doctrine/PlatenumDoctrineType.php" />
+            </errorLevel>
+        </DeprecatedMethod>
+    </issueHandlers>
+
 </psalm>
