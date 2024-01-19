@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpunit
-    backupGlobals = "false"
-    backupStaticAttributes = "false"
-    colors = "true"
-    convertErrorsToExceptions = "true"
-    convertNoticesToExceptions = "true"
-    convertWarningsToExceptions = "true"
-    processIsolation = "false"
-    stopOnFailure = "false"
-    bootstrap = "vendor/autoload.php"
+    colors="true"
+    stopOnFailure="false"
+    backupGlobals="false"
+    processIsolation="false"
+    backupStaticProperties="true"
+    bootstrap="vendor/autoload.php"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd">
 
     <testsuites>
         <testsuite name="Platenum">
@@ -18,10 +15,13 @@
         </testsuite>
     </testsuites>
 
-    <coverage>
+    <source>
         <include>
             <directory>src</directory>
         </include>
+    </source>
+
+    <coverage>
         <report>
             <clover outputFile="coverage.xml" />
             <html outputDirectory="coverage" lowUpperBound="50" highLowerBound="90" />

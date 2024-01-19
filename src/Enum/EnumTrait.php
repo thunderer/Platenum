@@ -20,7 +20,7 @@ trait EnumTrait
     protected static $instances = [];
 
     /** @param int|string $value */
-    final private function __construct(string $member, $value)
+    /* final */ private function __construct(string $member, $value)
     {
         $this->member = $member;
         $this->value = $value;
@@ -99,6 +99,20 @@ trait EnumTrait
         $enum = static::fromEnum($enum);
     }
 
+    /**
+     * @psalm-suppress UnusedForeachValue
+     * @return list<static>
+     */
+    final public static function getInstances(): array
+    {
+        static::resolveMembers();
+        foreach(static::$members[static::class] as $member => $value) {
+            static::fromMember($member);
+        }
+
+        return array_values(static::$instances[static::class]);
+    }
+
     /* --- EXCEPTIONS --- */
 
     /** @psalm-suppress UnusedParam */
@@ -174,6 +188,22 @@ trait EnumTrait
         return \in_array($value, static::$members[static::class], true);
     }
 
+    /** @param list<string> $members */
+    final public static function oneOfMembersExists(array $members): bool
+    {
+        static::resolveMembers();
+
+        return [] !== array_intersect(array_keys(static::$members[static::class]), $members);
+    }
+
+    /** @param list<int|string> $values */
+    final public static function oneOfValuesExists(array $values): bool
+    {
+        static::resolveMembers();
+
+        return [] !== array_intersect(static::$members[static::class], $values);
+    }
+
     final public function hasMember(string $members): bool
     {
         return $members === $this->member;
@@ -183,6 +213,24 @@ trait EnumTrait
     final public function hasValue($value): bool
     {
         return $value === $this->value;
+    }
+
+    /** @param list<string> $members */
+    final public function hasOneOfMembers(array $members): bool
+    {
+        return in_array($this->member, $members, true);
+    }
+
+    /** @param list<int|string> $values */
+    final public function hasOneOfValues(array $values): bool
+    {
+        return in_array($this->value, $values, true);
+    }
+
+    /** @param list<static> $enums */
+    final public function isOneOfInstances(array $enums): bool
+    {
+        return in_array($this, $enums, true);
     }
 
     /* --- INFO --- */

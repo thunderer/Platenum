@@ -28,12 +28,11 @@ final class PlatenumDoctrineType extends Type
         $toInteger = function($value): int {
             return (int)$value;
         };
-        /** @psalm-suppress UnusedClosureParam */
         $sql = function(array $declaration, AbstractPlatform $platform): string {
             return $platform->getIntegerTypeDeclarationSQL([]);
         };
 
-        static::registerCallback($alias, $class, $toInteger, $sql);
+        self::registerCallback($alias, $class, $toInteger, $sql);
     }
 
     /**
@@ -46,12 +45,11 @@ final class PlatenumDoctrineType extends Type
         $toString = function($value): string {
             return (string)$value;
         };
-        /** @psalm-suppress UnusedClosureParam */
         $sql = function(array $declaration, AbstractPlatform $platform): string {
             return $platform->getVarcharTypeDeclarationSQL([]);
         };
 
-        static::registerCallback($alias, $class, $toString, $sql);
+        self::registerCallback($alias, $class, $toString, $sql);
     }
 
     /**
@@ -62,17 +60,17 @@ final class PlatenumDoctrineType extends Type
      */
     private static function registerCallback(string $alias, string $class, callable $callback, callable $sql): void
     {
-        if(static::hasType($alias)) {
+        if(self::hasType($alias)) {
             throw new \LogicException(sprintf('Alias `%s` was already registered in PlatenumDoctrineType.', $class));
         }
-        if(false === in_array(EnumTrait::class, static::allTraitsOf($class), true)) {
+        if(false === in_array(EnumTrait::class, self::allTraitsOf($class), true)) {
             throw new \LogicException(sprintf('PlatenumDoctrineType allows only Platenum enumerations, `%s` given.', $class));
         }
 
-        static::addType($alias, static::class);
+        self::addType($alias, self::class);
 
         /** @var static $type */
-        $type = static::getType($alias);
+        $type = self::getType($alias);
         $type->platenumAlias = $alias;
         $type->platenumClass = $class;
         $type->platenumCallback = $callback;
@@ -119,7 +117,7 @@ final class PlatenumDoctrineType extends Type
         }
         if(false === is_object($value)) {
             $message = 'Impossible situation: `%s` allows to register only Platenum types, `%s` given.';
-            throw new \LogicException(sprintf($message, static::class, gettype($value)));
+            throw new \LogicException(sprintf($message, self::class, gettype($value)));
         }
 
         /** @psalm-suppress MixedMethodCall */
