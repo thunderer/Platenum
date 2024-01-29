@@ -265,26 +265,26 @@ final class EnumTest extends AbstractTestCase
         $this->assertFalse($enum::SECOND()->hasValue(1));
     }
 
-    public function testHasOneOfMembers(): void
+    public function testHasMemberIn(): void
     {
         $enum = $this->makeRawEnum(['FIRST' => 1, 'SECOND' => 2]);
 
-        $this->assertTrue($enum::SECOND()->hasOneOfMembers(['FIRST', 'SECOND']));
-        $this->assertTrue($enum::SECOND()->hasOneOfMembers(['SECOND', 'THIRD']));
-        $this->assertFalse($enum::SECOND()->hasOneOfMembers(['THIRD', 'FOURTH']));
-        $this->assertFalse($enum::SECOND()->hasOneOfMembers(['FIRST', 'FOURTH']));
-        $this->assertFalse($enum::SECOND()->hasOneOfMembers([1.5, null, 'invalid']));
+        $this->assertTrue($enum::SECOND()->hasMemberIn(['FIRST', 'SECOND']));
+        $this->assertTrue($enum::SECOND()->hasMemberIn(['SECOND', 'THIRD']));
+        $this->assertFalse($enum::SECOND()->hasMemberIn(['THIRD', 'FOURTH']));
+        $this->assertFalse($enum::SECOND()->hasMemberIn(['FIRST', 'FOURTH']));
+        $this->assertFalse($enum::SECOND()->hasMemberIn([1.5, null, 'invalid']));
     }
 
-    public function testHasOneOfValues(): void
+    public function testHasValueIn(): void
     {
         $enum = $this->makeRawEnum(['FIRST' => 1, 'SECOND' => 2]);
 
-        $this->assertTrue($enum::SECOND()->hasOneOfValues([1, 2]));
-        $this->assertTrue($enum::SECOND()->hasOneOfValues([2, 3]));
-        $this->assertFalse($enum::SECOND()->hasOneOfValues([1, 4]));
-        $this->assertFalse($enum::SECOND()->hasOneOfValues([3, 4]));
-        $this->assertFalse($enum::SECOND()->hasOneOfValues([1.5, null, 'invalid']));
+        $this->assertTrue($enum::SECOND()->hasValueIn([1, 2]));
+        $this->assertTrue($enum::SECOND()->hasValueIn([2, 3]));
+        $this->assertFalse($enum::SECOND()->hasValueIn([1, 4]));
+        $this->assertFalse($enum::SECOND()->hasValueIn([3, 4]));
+        $this->assertFalse($enum::SECOND()->hasValueIn([1.5, null, 'invalid']));
     }
 
     public function testMemberExists(): void
@@ -303,34 +303,48 @@ final class EnumTest extends AbstractTestCase
         $this->assertFalse($enum::valueExists(3));
     }
 
-    public function testOneOfMembersExists(): void
+    public function testMembersExist(): void
     {
         $enum = $this->makeRawEnum(['FIRST' => 1, 'SECOND' => 2]);
 
-        $this->assertTrue($enum::oneOfMembersExists(['FIRST', 'SECOND']));
-        $this->assertTrue($enum::oneOfMembersExists(['FIRST', 'THIRD']));
-        $this->assertFalse($enum::oneOfMembersExists(['THIRD', 'FOURTH']));
-        $this->assertFalse($enum::oneOfMembersExists([1.5, null, 'invalid']));
+        $this->assertTrue($enum::membersExist(['FIRST', 'SECOND']));
+        $this->assertTrue($enum::membersExist(['FIRST', 'THIRD']));
+        $this->assertFalse($enum::membersExist(['THIRD', 'FOURTH']));
+        $this->assertFalse($enum::membersExist([1.5, null, 'invalid']));
     }
 
-    public function testOneOfValuesExists(): void
+    public function testValuesExist(): void
     {
         $enum = $this->makeRawEnum(['FIRST' => 1, 'SECOND' => 2]);
 
-        $this->assertTrue($enum::oneOfValuesExists([1, 2]));
-        $this->assertTrue($enum::oneOfValuesExists([1, 3]));
-        $this->assertFalse($enum::oneOfValuesExists([3, 4]));
-        $this->assertFalse($enum::oneOfValuesExists([1.5, null, 'invalid']));
+        $this->assertTrue($enum::valuesExist([1, 2]));
+        $this->assertTrue($enum::valuesExist([1, 3]));
+        $this->assertFalse($enum::valuesExist([3, 4]));
+        $this->assertFalse($enum::valuesExist([1.5, null, 'invalid']));
     }
 
-    public function testIsOneOfInstances(): void
+    public function testIsIn(): void
     {
         $enum = $this->makeRawEnum(['FIRST' => 1, 'SECOND' => 2]);
 
-        $this->assertTrue($enum::SECOND()->isOneOfInstances([$enum::FIRST(), $enum::SECOND()]));
-        $this->assertTrue($enum::SECOND()->isOneOfInstances([$enum::SECOND(), new \stdClass()]));
-        $this->assertFalse($enum::SECOND()->isOneOfInstances([new \stdClass(), new \DateTimeImmutable()]));
-        $this->assertFalse($enum::SECOND()->isOneOfInstances([1.5, null, 'invalid']));
+        $this->assertTrue($enum::SECOND()->isIn([$enum::FIRST(), $enum::SECOND()]));
+        $this->assertTrue($enum::SECOND()->isIn([$enum::SECOND(), new \stdClass()]));
+        $this->assertFalse($enum::SECOND()->isIn([new \stdClass(), new \DateTimeImmutable()]));
+        $this->assertFalse($enum::SECOND()->isIn([1.5, null, 'invalid']));
+    }
+
+    public function testIsMemberWarm(): void
+    {
+        $enum = $this->makeRawEnum(['FIRST' => 1, 'SECOND' => 2]);
+
+        $this->assertFalse($enum::isMemberWarm('FIRST'));
+        $this->assertFalse($enum::isMemberWarm('SECOND'));
+        $enum::FIRST();
+        $this->assertTrue($enum::isMemberWarm('FIRST'));
+        $this->assertFalse($enum::isMemberWarm('SECOND'));
+        $enum::SECOND();
+        $this->assertTrue($enum::isMemberWarm('FIRST'));
+        $this->assertTrue($enum::isMemberWarm('SECOND'));
     }
 
     /* --- CONVERT --- */

@@ -189,7 +189,7 @@ trait EnumTrait
     }
 
     /** @param list<string> $members */
-    final public static function oneOfMembersExists(array $members): bool
+    final public static function membersExist(array $members): bool
     {
         static::resolveMembers();
 
@@ -197,7 +197,7 @@ trait EnumTrait
     }
 
     /** @param list<int|string> $values */
-    final public static function oneOfValuesExists(array $values): bool
+    final public static function valuesExist(array $values): bool
     {
         static::resolveMembers();
 
@@ -216,21 +216,28 @@ trait EnumTrait
     }
 
     /** @param list<string> $members */
-    final public function hasOneOfMembers(array $members): bool
+    final public function hasMemberIn(array $members): bool
     {
         return in_array($this->member, $members, true);
     }
 
     /** @param list<int|string> $values */
-    final public function hasOneOfValues(array $values): bool
+    final public function hasValueIn(array $values): bool
     {
         return in_array($this->value, $values, true);
     }
 
     /** @param list<static> $enums */
-    final public function isOneOfInstances(array $enums): bool
+    final public function isIn(array $enums): bool
     {
         return in_array($this, $enums, true);
+    }
+
+    final public static function isMemberWarm(string $member): bool
+    {
+        return self::memberExists($member)
+            && array_key_exists(static::class, static::$instances)
+            && array_key_exists($member, static::$instances[static::class]);
     }
 
     /* --- INFO --- */
