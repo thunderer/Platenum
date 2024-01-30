@@ -5,13 +5,16 @@ namespace Thunder\Platenum\Enum;
 use Thunder\Platenum\Exception\PlatenumException;
 
 /**
+ * @template TMember
+ * @template TValue
+ *
  * @author Tomasz Kowalczyk <tomasz@kowalczyk.cc>
  */
 trait EnumTrait
 {
-    /** @var string */
+    /** @var TMember */
     private $member;
-    /** @var int|string */
+    /** @var TValue */
     private $value;
 
     /** @var non-empty-array<string,non-empty-array<string,int|string>> */
@@ -19,7 +22,11 @@ trait EnumTrait
     /** @var array<string,array<string,static>> */
     protected static $instances = [];
 
-    /** @param int|string $value */
+
+    /**
+     * @param TMember $member
+     * @param TValue $value
+     */
     /* final */ private function __construct(string $member, $value)
     {
         $this->member = $member;
@@ -51,7 +58,7 @@ trait EnumTrait
             static::throwDefaultInvalidMemberException($member);
         }
 
-        /** @psalm-suppress UnsafeInstantiation */
+        /** @psalm-suppress UnsafeInstantiation,ArgumentTypeCoercion,PropertyTypeCoercion */
         return static::$instances[$class][$member] = new static($member, static::$members[$class][$member]);
     }
 
@@ -91,6 +98,7 @@ trait EnumTrait
     }
 
     /**
+     * @psalm-suppress ReferenceConstraintViolation
      * @param static $enum
      * @param-out AbstractConstantsEnum|AbstractDocblockEnum|AbstractStaticEnum|AbstractCallbackEnum|AbstractAttributeEnum $enum
      */
@@ -149,17 +157,19 @@ trait EnumTrait
 
     /* --- TRANSFORM --- */
 
+    /** @return TMember */
     final public function getMember(): string
     {
         return $this->member;
     }
 
-    /** @return int|string */
+    /** @return TValue */
     final public function getValue()
     {
         return $this->value;
     }
 
+    /** @psalm-suppress MissingReturnType */
     #[\ReturnTypeWillChange]
     final public function jsonSerialize()
     {
@@ -204,24 +214,25 @@ trait EnumTrait
         return [] !== array_intersect(static::$members[static::class], $values);
     }
 
-    final public function hasMember(string $members): bool
+    /** @param TMember $member */
+    final public function hasMember(string $member): bool
     {
-        return $members === $this->member;
+        return $member === $this->member;
     }
 
-    /** @param int|string $value */
+    /** @param TValue $value */
     final public function hasValue($value): bool
     {
         return $value === $this->value;
     }
 
-    /** @param list<string> $members */
+    /** @param list<TMember> $members */
     final public function hasMemberIn(array $members): bool
     {
         return in_array($this->member, $members, true);
     }
 
-    /** @param list<int|string> $values */
+    /** @param list<TValue> $values */
     final public function hasValueIn(array $values): bool
     {
         return in_array($this->value, $values, true);

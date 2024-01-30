@@ -3,10 +3,14 @@ declare(strict_types=1);
 namespace Thunder\Platenum\Enum;
 
 /**
+ * @template TMember
+ * @template TValue
+ *
  * @author Tomasz Kowalczyk <tomasz@kowalczyk.cc>
  */
 trait AttributeEnumTrait
 {
+    /** @use EnumTrait<TMember,TValue> */
     use EnumTrait;
 
     /** @psalm-suppress UndefinedDocblockClass, UndefinedMethod because there is no ReflectionAttribute on PHP <8.0 */
