@@ -5,10 +5,14 @@ namespace Thunder\Platenum\Enum;
 use Thunder\Platenum\Exception\PlatenumException;
 
 /**
+ * @template TMember
+ * @template TValue
+ *
  * @author Tomasz Kowalczyk <tomasz@kowalczyk.cc>
  */
 trait CallbackEnumTrait
 {
+    /** @use EnumTrait<TMember,TValue> */
     use EnumTrait;
 
     /** @var non-empty-array<class-string,callable():array<string,int|string>> */

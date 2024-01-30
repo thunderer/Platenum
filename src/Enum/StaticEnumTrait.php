@@ -5,10 +5,14 @@ namespace Thunder\Platenum\Enum;
 use Thunder\Platenum\Exception\PlatenumException;
 
 /**
+ * @template TMember
+ * @template TValue
+ *
  * @author Tomasz Kowalczyk <tomasz@kowalczyk.cc>
  */
 trait StaticEnumTrait
 {
+    /** @use EnumTrait<TMember,TValue> */
     use EnumTrait;
 
     private static function resolve(): array

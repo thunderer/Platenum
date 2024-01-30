@@ -9,6 +9,7 @@
 
     <projectFiles>
         <directory name="src" />
+        <directory name="tests/Psalm" />
         <ignoreFiles>
             <directory name="vendor" />
         </ignoreFiles>
@@ -30,6 +31,11 @@
                 <file name="src/Doctrine/PlatenumDoctrineType.php" />
             </errorLevel>
         </DeprecatedMethod>
+        <DocblockTypeContradiction errorLevel="error">
+            <errorLevel type="suppress">
+                <file name="src/Enum/EnumTrait.php" /> <!-- PHP 7.2 only? -->
+            </errorLevel>
+        </DocblockTypeContradiction>
     </issueHandlers>
 
 </psalm>
