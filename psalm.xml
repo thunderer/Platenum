@@ -3,6 +3,8 @@
     errorLevel="1"
     resolveFromConfigFile="true"
     findUnusedPsalmSuppress="false"
+    findUnusedBaselineEntry="false"
+    findUnusedCode="false"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd">
@@ -11,31 +13,9 @@
         <directory name="src" />
         <directory name="tests/Psalm" />
         <ignoreFiles>
+            <file name="src/Doctrine/PlatenumDoctrineType.php" />
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
-
-    <issueHandlers>
-        <UnusedClosureParam errorLevel="error">
-            <errorLevel type="suppress">
-                <file name="src/Doctrine/PlatenumDoctrineType.php" />
-            </errorLevel>
-        </UnusedClosureParam>
-        <UnusedPsalmSuppress errorLevel="error">
-            <errorLevel type="suppress">
-                <file name="src/Enum/AttributeEnumTrait.php" />
-            </errorLevel>
-        </UnusedPsalmSuppress>
-        <DeprecatedMethod errorLevel="error">
-            <errorLevel type="suppress">
-                <file name="src/Doctrine/PlatenumDoctrineType.php" />
-            </errorLevel>
-        </DeprecatedMethod>
-        <DocblockTypeContradiction errorLevel="error">
-            <errorLevel type="suppress">
-                <file name="src/Enum/EnumTrait.php" /> <!-- PHP 7.2 only? -->
-            </errorLevel>
-        </DocblockTypeContradiction>
-    </issueHandlers>
 
 </psalm>

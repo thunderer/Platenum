@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\Mapping\Driver\StaticPHPDriver;
 use Thunder\Platenum\Doctrine\PlatenumDoctrineType;
 use Thunder\Platenum\Tests\Fake\DoctrineEntity;
+use Thunder\Platenum\Tests\Fake\DoctrineExtendsEnum;
 use Thunder\Platenum\Tests\Fake\DoctrineIntEnum;
 use Thunder\Platenum\Tests\Fake\DoctrineStringEnum;
 use Thunder\Platenum\Tests\Fake\NoTraitEnum;
@@ -100,5 +101,11 @@ final class DoctrineTest extends AbstractTestCase
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('PlatenumDoctrineType allows only Platenum enumerations, `'.NoTraitEnum::class.'` given.');
         PlatenumDoctrineType::registerString('noTraitEnum', NoTraitEnum::class);
+    }
+
+    public function testInheritance(): void
+    {
+        PlatenumDoctrineType::registerString('doctrineExtendsEnum', DoctrineExtendsEnum::class);
+        $this->assertTrue(true);
     }
 }

@@ -65,7 +65,14 @@ final class EnumTest extends AbstractTestCase
         $first = $enum::fromMember('FIRST');
         $otherFirst = $enum::fromEnum($first);
 
-        $this->assertSame([$enum::FIRST(), $enum::SECOND()], $enum::getInstances());
+        $this->assertSame([$first, $enum::SECOND()], $enum::getInstances());
+    }
+
+    public function testGetInstancesCold(): void
+    {
+        $enum = $this->makeRawEnum(['FIRST' => 1, 'SECOND' => 2]);
+
+        $this->assertCount(2, $enum::getInstances());
     }
 
     public function testExceptionNonScalarValue(): void
