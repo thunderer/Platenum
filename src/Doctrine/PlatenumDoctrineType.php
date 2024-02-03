@@ -4,6 +4,7 @@ namespace Thunder\Platenum\Doctrine;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
+use Thunder\Platenum\Enum\AbstractConstantsEnum;
 use Thunder\Platenum\Enum\EnumTrait;
 
 /** @psalm-suppress PropertyNotSetInConstructor, MissingConstructor */
@@ -13,7 +14,7 @@ final class PlatenumDoctrineType extends Type
     private $platenumClass;
     /** @var string */
     private $platenumAlias;
-    /** @var callable */
+    /** @var callable(mixed):mixed */
     private $platenumCallback;
     /** @psalm-var callable(array,AbstractPlatform):string */
     private $platenumSql;
@@ -46,7 +47,9 @@ final class PlatenumDoctrineType extends Type
             return (string)$value;
         };
         $sql = function(array $declaration, AbstractPlatform $platform): string {
-            return $platform->getVarcharTypeDeclarationSQL([]);
+            return method_exists($platform, 'getStringTypeDeclarationSQL')
+                ? $platform->getStringTypeDeclarationSQL([])
+                : $platform->getVarcharTypeDeclarationSQL([]);
         };
 
         self::registerCallback($alias, $class, $toString, $sql);
@@ -55,7 +58,7 @@ final class PlatenumDoctrineType extends Type
     /**
      * @param string $alias
      * @psalm-param class-string $class
-     * @param callable $callback
+     * @param callable(int|string):mixed $callback
      * @psalm-param callable(array<mixed>,AbstractPlatform):string $sql
      */
     private static function registerCallback(string $alias, string $class, callable $callback, callable $sql): void
@@ -120,8 +123,8 @@ final class PlatenumDoctrineType extends Type
             throw new \LogicException(sprintf($message, self::class, gettype($value)));
         }
 
-        /** @psalm-suppress MixedMethodCall */
-        return ($this->platenumCallback)($value->getValue());
+        /** @var AbstractConstantsEnum $value */
+        return call_user_func($this->platenumCallback, $value->getValue());
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
