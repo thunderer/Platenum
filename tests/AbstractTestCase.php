@@ -14,8 +14,10 @@ use Thunder\Platenum\Enum\ConstantsEnumTrait;
 use Thunder\Platenum\Enum\DocblockEnumTrait;
 use Thunder\Platenum\Enum\EnumTrait;
 use Thunder\Platenum\Enum\Member;
+use Thunder\Platenum\Enum\NativeEnumTrait;
 use Thunder\Platenum\Enum\StaticEnumTrait;
 use Thunder\Platenum\Tests\Fake\FakeEnum;
+use Thunder\Platenum\Tests\Fake\FakeNativeEnum;
 
 /**
  * @author Tomasz Kowalczyk <tomasz@kowalczyk.cc>
@@ -34,6 +36,25 @@ abstract class AbstractTestCase extends TestCase
         eval('final class '.$class.' implements \JsonSerializable {
             use '.EnumTrait::class.';
             private static function resolve(): array { return ['.implode(', ', $entries).']; }
+        }');
+
+        return $class;
+    }
+
+    /** @return FakeNativeEnum */
+    protected function makeNativeEnum(array $members): string
+    {
+        $entries = [];
+        foreach($members as $member => $value) {
+            $entries[] = sprintf('case %s = %s;', $member, is_string($value) ? '\''.$value.'\'' : $value);
+        }
+
+        $type = array_values(array_unique(array_map('gettype', $members)))[0];
+        $type = 'integer' === $type ? 'int' : $type;
+        $class = $this->computeUniqueClassName('NativeRawEnum');
+        eval('enum '.$class.': '.$type.' implements \JsonSerializable {
+            '.implode("\n", $entries).'
+            use '.NativeEnumTrait::class.';
         }');
 
         return $class;
